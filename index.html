@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jovanna Garza — Marketing Analytics Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --accent: #c8a96e;
+    --accent2: #8b6f47;
+    --text: #e8e4dc;
+    --text-muted: #6b6560;
+    --text-dim: #9a948c;
+    --tag-bg: #1e1a16;
+    --tag-border: #3a2e22;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  nav.scrolled {
+    border-color: var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-line {
+    position: absolute;
+    top: 0;
+    right: 18%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    opacity: 0.5;
+  }
+
+  .hero-grid-line-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 72%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    opacity: 0.4;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s forwards 0.2s;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 0.9s forwards 0.4s;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    margin-top: 2.5rem;
+    max-width: 520px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.9s forwards 0.6s;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.9s forwards 0.8s;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 0.9rem 2.2rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: #d4b87a;
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .btn-ghost:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .hero-stats {
+    position: absolute;
+    right: 4rem;
+    bottom: 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s forwards 1s;
+  }
+
+  .stat-item {
+    text-align: right;
+  }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 7rem 4rem;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    max-width: 560px;
+    line-height: 1.9;
+    margin-bottom: 4rem;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .about-right {
+    padding-top: 1rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.2rem 1.4rem;
+    transition: border-color 0.2s;
+  }
+
+  .skill-card:hover { border-color: var(--accent2); }
+
+  .skill-card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-card-list {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .experience-item {
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .experience-item::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 6px;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .exp-role {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .exp-company {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin: 0.2rem 0;
+  }
+
+  .exp-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-top: 0.4rem;
+  }
+
+  /* ── WORK / PROJECTS ── */
+  .work { border-top: 1px solid var(--border); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+  }
+
+  .project-card {
+    background: var(--bg);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .project-card:hover { background: var(--surface); }
+  .project-card:hover::after { transform: scaleX(1); }
+
+  .project-card.wip {
+    opacity: 0.6;
+  }
+
+  .project-card.wip:hover { opacity: 0.85; }
+
+  .project-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .project-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .project-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .project-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    padding: 0.2rem 0.6rem;
+  }
+
+  .project-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .status-complete { color: #6a9e6a; }
+  .status-wip { color: var(--accent2); }
+  .status-planned { color: var(--text-muted); }
+
+  .project-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent2);
+    padding-bottom: 1px;
+    transition: color 0.2s;
+    display: inline-block;
+    margin-left: 1rem;
+  }
+
+  /* ── APPROACH ── */
+  .approach {
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+  }
+
+  .approach-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .approach-step {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    transition: background 0.2s;
+  }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.5;
+  }
+
+  .step-content h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .step-content p {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .contact-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .contact-link-arrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent2); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 2rem; }
+    section { padding: 5rem 2rem; }
+    .hero { padding: 7rem 2rem 3rem; }
+    .hero h1 { font-size: 3rem; }
+    .hero-stats { display: none; }
+    .about, .contact, .approach { grid-template-columns: 1fr; gap: 3rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#" class="nav-logo">JG</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-grid-line"></div>
+  <div class="hero-grid-line-h"></div>
+
+  <p class="hero-tag">Marketing Analytics Portfolio</p>
+  <h1>Turning <em>data</em> into<br>decisions that grow<br>brands.</h1>
+  <p class="hero-sub">
+    I'm Jovanna Garza — a marketing analytics professional based in Austin, TX.
+    I specialize in full-funnel measurement, channel performance analysis,
+    and translating raw data into actionable strategy.
+  </p>
+  <div class="hero-cta">
+    <a href="#work" class="btn-primary">View Projects</a>
+    <a href="#contact" class="btn-ghost">Get in Touch</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">5+</div>
+      <div class="stat-label">Case Studies</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Tools: Tableau · Excel · Python</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">ATX</div>
+      <div class="stat-label">Based in Austin, TX</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about fade-in" id="about">
+  <div class="about-left">
+    <p class="section-label">About</p>
+    <h2 class="section-title">Analytics meets<br><em>strategy.</em></h2>
+    <p class="section-desc">
+      I graduated with a background in business and marketing and quickly found my focus:
+      using data to understand how marketing actually performs — not just how it looks.
+      My work spans enterprise brand analysis, local business strategy, and personal data projects,
+      all built around one question: <em>what does the data say you should do next?</em>
+    </p>
+    <div style="margin-top: 2rem;">
+      <div class="experience-item">
+        <div class="exp-role">Media Monitoring Analyst Intern</div>
+        <div class="exp-company">Penta</div>
+        <div class="exp-desc">Media analysis, stakeholder reporting, tracking brand narrative across channels.</div>
+      </div>
+      <div class="experience-item">
+        <div class="exp-role">Marketing Analytics Training</div>
+        <div class="exp-company">Meta Blueprint</div>
+        <div class="exp-desc">Paid social measurement, campaign optimization, attribution fundamentals.</div>
+      </div>
+      <div class="experience-item">
+        <div class="exp-role">B.S. Business & Marketing</div>
+        <div class="exp-company">Graduated August 2025</div>
+        <div class="exp-desc">Data science coursework, marketing strategy, consumer behavior research.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-right">
+    <p class="section-label">Toolkit</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-title">Analysis</div>
+        <div class="skill-card-list">Excel · Python<br>SQL (learning)<br>Google Analytics 4</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">Visualization</div>
+        <div class="skill-card-list">Tableau<br>HTML/CSS<br>Canva</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">Measurement</div>
+        <div class="skill-card-list">MMM Fundamentals<br>Attribution Models<br>Incrementality</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">Channels</div>
+        <div class="skill-card-list">Meta Ads<br>TikTok · Paid Social<br>DTC · Amazon</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">Strategy</div>
+        <div class="skill-card-list">Full-Funnel Analysis<br>CAC / ROAS / LTV<br>Competitive Research</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">Workflow</div>
+        <div class="skill-card-list">Notion · GitHub<br>Tableau Public<br>Yelp & Google APIs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WORK ── -->
+<section class="work fade-in" id="work">
+  <p class="section-label">Selected Work</p>
+  <h2 class="section-title">Projects that <em>answer<br>real questions.</em></h2>
+  <p class="section-desc">Each project is built around a specific marketing problem — sourced from real data, cleaned, analyzed, and turned into a recommendation.</p>
+
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-number">01</div>
+      <div class="project-category">Enterprise · Beauty</div>
+      <div class="project-title">e.l.f. Cosmetics Full-Funnel Analysis</div>
+      <div class="project-desc">Fospha-style channel performance breakdown covering TikTok, paid social, DTC, and Amazon. Includes measurement gap identification and ROAS optimization recommendations.</div>
+      <div class="project-tags">
+        <span class="tag">MMM</span>
+        <span class="tag">TikTok</span>
+        <span class="tag">ROAS</span>
+        <span class="tag">Attribution</span>
+        <span class="tag">Excel</span>
+      </div>
+      <span class="project-status status-complete">● Complete</span>
+    </div>
+
+    <div class="project-card">
+      <div class="project-number">02</div>
+      <div class="project-category">Enterprise · Fitness</div>
+      <div class="project-title">Gymshark Client Insight Report</div>
+      <div class="project-desc">Mock client insight meeting prepared as if presenting to the Gymshark marketing team. Full-funnel channel analysis, ad investment recommendations, and incremental growth opportunities.</div>
+      <div class="project-tags">
+        <span class="tag">Incrementality</span>
+        <span class="tag">Paid Social</span>
+        <span class="tag">TikTok Shop</span>
+        <span class="tag">CAC</span>
+        <span class="tag">Excel</span>
+      </div>
+      <span class="project-status status-wip">◐ In Progress</span>
+    </div>
+
+    <div class="project-card">
+      <div class="project-number">03</div>
+      <div class="project-category">Personal Project · Local Data</div>
+      <div class="project-title">Austin Eats: Restaurant Discovery Dashboard</div>
+      <div class="project-desc">End-to-end data project: pulled Austin restaurant data via Yelp API, cleaned in Excel, visualized in Tableau. Interactive map filtered by cuisine, neighborhood, price, and food truck status.</div>
+      <div class="project-tags">
+        <span class="tag">Yelp API</span>
+        <span class="tag">Excel</span>
+        <span class="tag">Tableau</span>
+        <span class="tag">Data Cleaning</span>
+        <span class="tag">Python</span>
+      </div>
+      <span class="project-status status-wip">◐ In Progress</span>
+    </div>
+
+    <div class="project-card wip">
+      <div class="project-number">04</div>
+      <div class="project-category">Local Business · Strategy</div>
+      <div class="project-title">Austin Coffee Shop Marketing Strategy</div>
+      <div class="project-desc">Local small business marketing analysis. Channel mix recommendation, customer acquisition strategy, and competitive positioning for an independent Austin café.</div>
+      <div class="project-tags">
+        <span class="tag">Local SEO</span>
+        <span class="tag">Instagram</span>
+        <span class="tag">CAC</span>
+        <span class="tag">Strategy</span>
+      </div>
+      <span class="project-status status-planned">○ Planned</span>
+    </div>
+
+    <div class="project-card wip">
+      <div class="project-number">05</div>
+      <div class="project-category">Fashion · Paid Social</div>
+      <div class="project-title">Fashion/Beauty Brand Paid Social Analysis</div>
+      <div class="project-desc">Influencer + paid social attribution analysis for a fashion or beauty brand. TikTok vs. Meta ROAS comparison, creator performance benchmarking.</div>
+      <div class="project-tags">
+        <span class="tag">Influencer</span>
+        <span class="tag">Meta Ads</span>
+        <span class="tag">TikTok</span>
+        <span class="tag">Attribution</span>
+      </div>
+      <span class="project-status status-planned">○ Planned</span>
+    </div>
+
+    <div class="project-card wip">
+      <div class="project-number">06</div>
+      <div class="project-category">Tableau · Data Viz</div>
+      <div class="project-title">Tableau Dashboard: Channel ROAS by Vertical</div>
+      <div class="project-desc">Which channels drive the highest ROAS in beauty vs. fitness? Public dataset sourced from Kaggle. Interactive Tableau dashboard published to Tableau Public.</div>
+      <div class="project-tags">
+        <span class="tag">Tableau</span>
+        <span class="tag">ROAS</span>
+        <span class="tag">Kaggle</span>
+        <span class="tag">Benchmarks</span>
+      </div>
+      <span class="project-status status-planned">○ Planned</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── APPROACH ── -->
+<section class="approach fade-in" id="approach">
+  <div>
+    <p class="section-label">Approach</p>
+    <h2 class="section-title">How I <em>work</em><br>through a problem.</h2>
+    <p class="section-desc">Every project follows the same discipline: start with a real question, find the right data, and don't stop until the answer is actionable.</p>
+  </div>
+
+  <div class="approach-steps">
+    <div class="approach-step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h4>Define the Marketing Question</h4>
+        <p>Before touching data, I identify what decision the analysis needs to support — budget reallocation, channel expansion, or measurement gap identification.</p>
+      </div>
+    </div>
+    <div class="approach-step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h4>Source & Validate Data</h4>
+        <p>Pull from APIs, public datasets, or earnings reports. Clean and reconcile in Excel. Document every assumption and flag estimated vs. verified figures.</p>
+      </div>
+    </div>
+    <div class="approach-step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h4>Analyze Against Benchmarks</h4>
+        <p>Performance only means something in context. I compare channel metrics against industry benchmarks — CTR, ROAS, CAC — to identify what's over- or under-performing.</p>
+      </div>
+    </div>
+    <div class="approach-step">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h4>Deliver Actionable Recommendations</h4>
+        <p>Every output ties back to a decision. I present findings as recommendations with expected outcomes — not just observations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact fade-in" id="contact">
+  <div>
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">Let's work<br>on something <em>real.</em></h2>
+    <p class="section-desc">Open to marketing analytics roles, freelance projects, and collaboration. Based in Austin, TX — available immediately.</p>
+  </div>
+
+  <div class="contact-right">
+    <a href="mailto:jovannagarza1@gmail.com" class="contact-link">
+      <span>jovannagarza1@gmail.com</span>
+      <span class="contact-link-arrow">→</span>
+    </a>
+    <a href="https://www.linkedin.com/in/jovannagarza/" target="_blank" class="contact-link">
+      <span>LinkedIn — Jovanna Garza</span>
+      <span class="contact-link-arrow">→</span>
+    </a>
+    <a href="https://github.com" target="_blank" class="contact-link">
+      <span>GitHub — Portfolio Files</span>
+      <span class="contact-link-arrow">→</span>
+    </a>
+    <a href="https://public.tableau.com" target="_blank" class="contact-link">
+      <span>Tableau Public — Dashboards</span>
+      <span class="contact-link-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2025 Jovanna Garza — Marketing Analytics</p>
+  <p>Austin, TX · Built for clarity, not decoration.</p>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
