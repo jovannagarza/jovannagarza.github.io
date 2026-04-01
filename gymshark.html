@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gymshark — Client Insight Report | Jovanna Garza</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --surface: #ffffff;
+    --surface2: #f3f0eb;
+    --border: #e8e3db;
+    --accent: #ff6b35;
+    --accent2: #ff8c5a;
+    --accent-light: rgba(255,107,53,0.08);
+    --teal: #0d9488;
+    --teal-light: rgba(13,148,136,0.08);
+    --navy: #1e293b;
+    --text: #1e293b;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --green: #10b981;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .fade-up { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+  .fade-up-1 { animation-delay: 0.1s; }
+  .fade-up-2 { animation-delay: 0.25s; }
+  .fade-up-3 { animation-delay: 0.4s; }
+  .fade-up-4 { animation-delay: 0.55s; }
+
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--teal));
+    z-index: 1000;
+    transition: width 0.1s;
+  }
+
+  /* Nav */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(250,248,245,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Hero */
+  .hero {
+    padding: 6rem 4rem 4rem;
+    background: linear-gradient(135deg, #fff9f7 0%, #faf8f5 50%, #f0fdf9 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,107,53,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-light);
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+
+  .hero-pill-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    max-width: 800px;
+  }
+
+  .hero h1 .hl-orange { color: var(--accent); font-style: italic; }
+  .hero h1 .hl-teal { color: var(--teal); font-style: italic; }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.85;
+    margin-bottom: 3rem;
+  }
+
+  .hero-stats-row { display: flex; gap: 3rem; flex-wrap: wrap; }
+
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .hero-stat-num.orange { color: var(--accent); }
+  .hero-stat-num.teal { color: var(--teal); }
+
+  .hero-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 6rem; right: 4rem;
+    text-align: right;
+  }
+  .hero-meta p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    line-height: 2.2;
+  }
+
+  /* Sections */
+  section { padding: 5rem 4rem; border-bottom: 1px solid var(--border); }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    width: 50px; height: 1px;
+    background: var(--accent);
+    opacity: 0.3;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .section-intro {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    max-width: 680px;
+    line-height: 1.85;
+    margin-bottom: 3rem;
+  }
+
+  /* Snapshot cards */
+  .snapshot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .snapshot-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .snapshot-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-color, var(--accent));
+    border-radius: 14px 14px 0 0;
+  }
+  .snapshot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 42px rgba(0,0,0,0.09);
+  }
+
+  .card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+    display: block;
+    animation: float 3.5s ease-in-out infinite;
+  }
+
+  .snapshot-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .snapshot-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .snapshot-note {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  /* Charts */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    transition: box-shadow 0.2s;
+  }
+  .chart-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.06); }
+
+  .chart-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .chart-subtitle {
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .chart-wrap { position: relative; height: 240px; }
+
+  /* Channel table */
+  .channel-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.4rem;
+    font-size: 0.82rem;
+  }
+  .channel-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.4rem 1rem;
+    text-align: left;
+  }
+  .channel-table td {
+    padding: 0.9rem 1rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: background 0.2s;
+  }
+  .channel-table td:first-child { border-left: 1px solid var(--border); border-radius: 8px 0 0 8px; }
+  .channel-table td:last-child { border-right: 1px solid var(--border); border-radius: 0 8px 8px 0; }
+  .channel-table tr:hover td { background: #fff9f7; }
+
+  .channel-name { font-weight: 600; color: var(--text); font-size: 0.85rem; }
+
+  .budget-bar-wrap { display: flex; align-items: center; gap: 0.6rem; }
+  .budget-bar-bg { flex: 1; max-width: 90px; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .budget-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; }
+  .budget-pct { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--accent); font-weight: 500; }
+
+  .data-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.08em;
+    padding: 0.18rem 0.55rem;
+    border-radius: 100px;
+  }
+  .tag-verified { background: rgba(16,185,129,0.1); color: var(--green); }
+  .tag-reported { background: rgba(245,158,11,0.1); color: var(--yellow); }
+
+  /* Benchmarks */
+  .benchmark-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .benchmark-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .benchmark-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+
+  .benchmark-metric {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .benchmark-compare {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  .benchmark-item { text-align: center; }
+  .benchmark-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+  }
+  .val-up { color: var(--green); }
+  .val-down { color: var(--red); }
+  .val-neutral { color: var(--text-muted); }
+
+  .benchmark-who {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+  .benchmark-vs { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--border); align-self: center; }
+
+  .benchmark-bar { height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-bottom: 0.75rem; }
+  .benchmark-fill { height: 100%; border-radius: 3px; }
+  .fill-up { background: linear-gradient(90deg, var(--green), #34d399); }
+  .fill-down { background: linear-gradient(90deg, var(--red), #f87171); }
+
+  .benchmark-gap-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .benchmark-insight { font-size: 0.75rem; color: var(--text-dim); line-height: 1.65; }
+
+  /* Opportunity */
+  .opportunity-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .opportunity-card {
+    border-radius: 16px;
+    padding: 2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .opportunity-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
+
+  .opp-orange { background: linear-gradient(135deg, #fff4f0, #ffe8df); border: 1px solid rgba(255,107,53,0.2); }
+  .opp-teal { background: linear-gradient(135deg, #f0fdfa, #d9f9f4); border: 1px solid rgba(13,148,136,0.2); }
+  .opp-purple { background: linear-gradient(135deg, #faf5ff, #ede9fe); border: 1px solid rgba(139,92,246,0.2); }
+
+  .opp-emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; animation: float 4s ease-in-out infinite; }
+  .opp-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text); }
+  .opp-body { font-size: 0.82rem; color: var(--text-dim); line-height: 1.85; margin-bottom: 1.25rem; }
+
+  .opp-impact {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    padding: 0.4rem 0.85rem;
+    border-radius: 100px;
+    display: inline-block;
+  }
+  .impact-orange { background: rgba(255,107,53,0.12); color: var(--accent); }
+  .impact-teal { background: rgba(13,148,136,0.12); color: var(--teal); }
+  .impact-purple { background: rgba(139,92,246,0.12); color: var(--purple); }
+
+  /* MMM Section */
+  .mmm-section {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+    border-radius: 20px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .mmm-section::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,229,160,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .mmm-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #00e5a0;
+    margin-bottom: 0.75rem;
+  }
+
+  .mmm-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .mmm-intro {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    line-height: 1.85;
+    max-width: 720px;
+    margin-bottom: 2.5rem;
+  }
+
+  .formula-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .formula-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #00e5a0;
+    margin-bottom: 1.25rem;
+  }
+
+  .formula-main {
+    font-size: clamp(0.72rem, 1.8vw, 0.95rem);
+    color: white;
+    line-height: 2.2;
+    word-break: break-word;
+  }
+
+  .fv { color: #00e5a0; }
+  .fc { color: #f59e0b; }
+  .fch { color: #60a5fa; }
+  .fct { color: #c084fc; }
+  .fe { color: #f87171; }
+
+  .formula-legend {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .legend-item {
+    padding: 1rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+  }
+
+  .legend-sym { font-family: 'DM Mono', monospace; font-size: 0.82rem; margin-bottom: 0.4rem; }
+  .legend-desc { font-size: 0.73rem; color: #64748b; line-height: 1.6; }
+
+  .mmm-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .mmm-step {
+    padding: 1.25rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+  }
+  .mmm-step-num { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: #00e5a0; margin-bottom: 0.5rem; }
+  .mmm-step-title { font-size: 0.85rem; font-weight: 600; color: white; margin-bottom: 0.4rem; }
+  .mmm-step-body { font-size: 0.75rem; color: #64748b; line-height: 1.65; }
+
+  .gymshark-proof {
+    background: rgba(0,229,160,0.06);
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .proof-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #00e5a0;
+    margin-bottom: 0.75rem;
+  }
+  .proof-text { font-size: 0.85rem; color: #cbd5e1; line-height: 1.85; }
+  .proof-text strong { color: #00e5a0; }
+
+  /* Recommendations */
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .rec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rec-card:hover { transform: translateY(-5px); box-shadow: 0 12px 36px rgba(0,0,0,0.08); }
+  .rec-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--rec-color, var(--accent));
+    border-radius: 14px 14px 0 0;
+  }
+
+  .rec-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--surface2);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .rec-title { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; line-height: 1.4; }
+  .rec-body { font-size: 0.8rem; color: var(--text-dim); line-height: 1.8; margin-bottom: 1.25rem; }
+
+  .rec-outcome {
+    font-size: 0.77rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: var(--surface2);
+    color: var(--text-dim);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+  .rec-outcome strong { color: var(--text); }
+
+  .rec-tool {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+
+  /* Sources */
+  .sources-section { padding: 2.5rem 4rem; background: var(--surface2); }
+  .sources-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+  .sources-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .sources-list li {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    list-style: none;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .sources-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+  .sources-list a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .sources-list a:hover { color: var(--accent); }
+
+  .analyst-bar {
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .analyst-bar p { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; color: var(--text-muted); }
+  .analyst-bar a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 900px) {
+    nav, section, .hero, .sources-section, .analyst-bar { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .snapshot-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid, .benchmark-grid, .rec-grid, .opportunity-grid { grid-template-columns: 1fr; }
+    .formula-legend, .mmm-steps { grid-template-columns: 1fr; }
+    .hero-meta { display: none; }
+    .hero-stats-row { gap: 1.5rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">← <span>JG</span> Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#snapshot">Snapshot</a></li>
+    <li><a href="#channels">Channels</a></li>
+    <li><a href="#benchmarks">Benchmarks</a></li>
+    <li><a href="#opportunity">Opportunity</a></li>
+    <li><a href="#measurement">How MMM Works</a></li>
+    <li><a href="#recommendations">Recommendations</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-meta">
+    <p>Analyst — Jovanna Garza</p>
+    <p>Data — Companies House FY2024</p>
+    <p>Fospha Client — Verified</p>
+    <p>Prepared — 2025</p>
+  </div>
+
+  <div class="hero-pill fade-up fade-up-1">
+    <span class="hero-pill-dot"></span>
+    Client Insight Report — Gymshark Group Limited
+  </div>
+
+  <h1 class="fade-up fade-up-2">
+    Gymshark is<br>
+    <span class="hl-orange">growing fast.</span><br>
+    Here's how to grow<br>
+    <span class="hl-teal">smarter.</span>
+  </h1>
+
+  <p class="hero-sub fade-up fade-up-3">
+    Gymshark broke £600M in revenue for the first time in FY2024 — and their margins are genuinely impressive. But with £126M in marketing spend and no channel-level visibility, they're making budget decisions in the dark. This report shows exactly where the opportunities are, why they exist, and how measurement closes the gap.
+  </p>
+
+  <div class="hero-stats-row fade-up fade-up-4">
+    <div>
+      <div class="hero-stat-num orange">£607M</div>
+      <div class="hero-stat-label">FY2024 Revenue</div>
+    </div>
+    <div>
+      <div class="hero-stat-num teal">63%</div>
+      <div class="hero-stat-label">Gross Margin</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">97%</div>
+      <div class="hero-stat-label">DTC Revenue</div>
+    </div>
+    <div>
+      <div class="hero-stat-num orange">£51.7M</div>
+      <div class="hero-stat-label">Adjusted EBITDA</div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 SNAPSHOT -->
+<section id="snapshot">
+  <p class="section-label">01 — Brand Snapshot</p>
+  <h2>The numbers that tell the real story.</h2>
+  <p class="section-intro">Gymshark's headline numbers are strong — but the story lives in the details. Revenue is growing, margins are recovering, and the business is investing heavily in its future. Here's what the FY2024 Companies House filing actually tells us.</p>
+
+  <div class="snapshot-grid">
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--green)">
+      <span class="card-icon">📈</span>
+      <div class="snapshot-label">Revenue FY2024</div>
+      <div class="snapshot-num" style="color: var(--green)">£607.3M</div>
+      <div class="snapshot-note">+9.2% YoY. Record revenue for the third consecutive year. Breaking £600M is a milestone — but growth is decelerating from +15% in FY2023. Worth watching.</div>
+    </div>
+
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--teal)">
+      <span class="card-icon">💪</span>
+      <div class="snapshot-label">Gross Profit Margin</div>
+      <div class="snapshot-num" style="color: var(--teal)">63%</div>
+      <div class="snapshot-note">Up from 60% in FY2023. Industry average is 45-55%. This means £63 of every £100 in sales is available for operating expenses and growth — significantly more than most competitors.</div>
+    </div>
+
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--yellow)">
+      <span class="card-icon">🔍</span>
+      <div class="snapshot-label">Distribution Costs</div>
+      <div class="snapshot-num" style="color: var(--yellow)">£126M</div>
+      <div class="snapshot-note">Gymshark's total marketing and fulfillment spend. Here's the problem: Companies House filings don't break this down by channel. £126M in spend — with no visibility into which channels are working hardest.</div>
+    </div>
+
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--yellow)">
+      <span class="card-icon">🧾</span>
+      <div class="snapshot-label">Net Profit Margin</div>
+      <div class="snapshot-num" style="color: var(--yellow)">1.2%</div>
+      <div class="snapshot-note">Looks low — but don't be misled. Adjusted EBITDA grew +14% to £51.7M. The gap is explained by intentional investments: NYC office, new retail stores, technology. A scaling business, not a struggling one.</div>
+    </div>
+
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--red)">
+      <span class="card-icon">🇺🇸</span>
+      <div class="snapshot-label">US Revenue Growth</div>
+      <div class="snapshot-num" style="color: var(--red)">+0.2%</div>
+      <div class="snapshot-note">The number that should get the most attention. The US is Gymshark's largest market (41% of revenue) and it barely grew while the broader activewear market expanded 8-12%. Gymshark lost market share in its most important territory.</div>
+    </div>
+
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--green)">
+      <span class="card-icon">🇬🇧</span>
+      <div class="snapshot-label">UK Revenue Growth</div>
+      <div class="snapshot-num" style="color: var(--green)">+22.1%</div>
+      <div class="snapshot-note">The contrast with the US couldn't be sharper. UK grew 3x faster than the market, driven by new retail stores. This proves there's no fundamental product problem — the brand works brilliantly when the conditions are right.</div>
+    </div>
+
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--teal)">
+      <span class="card-icon">🎯</span>
+      <div class="snapshot-label">DTC Revenue Mix</div>
+      <div class="snapshot-num" style="color: var(--teal)">97%</div>
+      <div class="snapshot-note">97% of revenue flows directly through Gymshark's own channels. Industry average is 60-70%. This is a powerful advantage — they own their customer data. Every purchase can theoretically be traced back to a marketing touchpoint.</div>
+    </div>
+
+    <div class="snapshot-card scroll-reveal" style="--card-color: var(--green)">
+      <span class="card-icon">⚡</span>
+      <div class="snapshot-label">Adjusted EBITDA</div>
+      <div class="snapshot-num" style="color: var(--green)">£51.7M</div>
+      <div class="snapshot-note">+14% YoY from £45.3M. This is the truest measure of operating health — stripping out one-off costs. The underlying business is becoming more profitable. That matters for every budget conversation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 CHANNELS -->
+<section id="channels">
+  <p class="section-label">02 — Channel Performance</p>
+  <h2>Where the revenue comes from.</h2>
+  <p class="section-intro">Three years of verified financial data, geographic revenue split, and estimated channel mix — sourced directly from Companies House filings and a published Gymshark x Fospha x Smartly case study (Nov 2025).</p>
+
+  <div class="charts-grid">
+    <div class="chart-card scroll-reveal">
+      <div class="chart-title">Revenue Trend — FY2022 to FY2024</div>
+      <div class="chart-subtitle">Verified from Companies House filings. All figures in £000s. Growth is real — and decelerating.</div>
+      <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+    </div>
+    <div class="chart-card scroll-reveal">
+      <div class="chart-title">Geographic Revenue — FY2024 vs FY2023</div>
+      <div class="chart-subtitle">The near-flat US bar next to the accelerating UK bar tells the strategic story of this report.</div>
+      <div class="chart-wrap"><canvas id="geoChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- US vs UK vs Market benchmark chart — full width -->
+  <div class="chart-card scroll-reveal" style="margin-bottom: 1.5rem;">
+    <div class="chart-title">US vs UK Revenue Growth — Gymshark vs Activewear Market Benchmark</div>
+    <div class="chart-subtitle">The same market conditions. Two very different outcomes. UK surpassed the benchmark by +12.1pp. US fell short by -9.8pp. This single chart is the most important strategic story in the FY2024 data.</div>
+    <div class="chart-wrap" style="height: 280px;"><canvas id="benchmarkGrowthChart"></canvas></div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card scroll-reveal">
+      <div class="chart-title">Estimated Channel Budget Allocation</div>
+      <div class="chart-subtitle">Based on publicly reported strategy. Gymshark does not disclose channel spend in filings — this is the gap.</div>
+      <div class="chart-wrap"><canvas id="channelChart"></canvas></div>
+    </div>
+    <div class="chart-card scroll-reveal">
+      <div class="chart-title">ROAS Uplift by Channel — Gymshark x Fospha x Smartly (Nov 2025)</div>
+      <div class="chart-subtitle">Notice Snapchat at +58% receiving ~5% of budget. That mismatch is the opportunity.</div>
+      <div class="chart-wrap" style="height: 280px;"><canvas id="roasChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="scroll-reveal" style="margin-top: 2rem;">
+    <table class="channel-table">
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th>Funnel Role</th>
+          <th>Est. Budget</th>
+          <th>Key Metric</th>
+          <th>Data Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="channel-name">Meta (Instagram + FB)</span></td>
+          <td>Mid + lower funnel — retargeting + conversion</td>
+          <td><div class="budget-bar-wrap"><div class="budget-bar-bg"><div class="budget-bar-fill" style="width:100%"></div></div><span class="budget-pct">35%</span></div></td>
+          <td>+13% overall ROAS uplift (Fospha+Smartly)</td>
+          <td><span class="data-tag tag-verified">Verified</span></td>
+        </tr>
+        <tr>
+          <td><span class="channel-name">TikTok Organic + Paid</span></td>
+          <td>Upper funnel — awareness + demand gen</td>
+          <td><div class="budget-bar-wrap"><div class="budget-bar-bg"><div class="budget-bar-fill" style="width:57%"></div></div><span class="budget-pct">20%</span></div></td>
+          <td>+39% ROAS uplift — highest paid social channel</td>
+          <td><span class="data-tag tag-verified">Verified</span></td>
+        </tr>
+        <tr>
+          <td><span class="channel-name">Influencer Program</span></td>
+          <td>Always-on — acquisition + brand equity</td>
+          <td><div class="budget-bar-wrap"><div class="budget-bar-bg"><div class="budget-bar-fill" style="width:57%"></div></div><span class="budget-pct">20%</span></div></td>
+          <td>~30% of social revenue attributed to influencers</td>
+          <td><span class="data-tag tag-reported">Reported</span></td>
+        </tr>
+        <tr>
+          <td><span class="channel-name">YouTube</span></td>
+          <td>Upper funnel — brand storytelling</td>
+          <td><div class="budget-bar-wrap"><div class="budget-bar-bg"><div class="budget-bar-fill" style="width:29%"></div></div><span class="budget-pct">10%</span></div></td>
+          <td>Weekly series + pre-roll — long-form engagement</td>
+          <td><span class="data-tag tag-reported">Reported</span></td>
+        </tr>
+        <tr>
+          <td><span class="channel-name">Snapchat ⚡</span></td>
+          <td>Lower funnel — retargeting</td>
+          <td><div class="budget-bar-wrap"><div class="budget-bar-bg"><div class="budget-bar-fill" style="width:14%"></div></div><span class="budget-pct">5%</span></div></td>
+          <td>+58% ROAS uplift — highest of all channels measured</td>
+          <td><span class="data-tag tag-verified">Verified</span></td>
+        </tr>
+        <tr>
+          <td><span class="channel-name">Email / CRM</span></td>
+          <td>Lower funnel — retention + repeat purchase</td>
+          <td><div class="budget-bar-wrap"><div class="budget-bar-bg"><div class="budget-bar-fill" style="width:14%"></div></div><span class="budget-pct">5%</span></div></td>
+          <td>28-32% open rate vs 21% industry average</td>
+          <td><span class="data-tag tag-reported">Reported</span></td>
+        </tr>
+        <tr>
+          <td><span class="channel-name">Retail + Events</span></td>
+          <td>Brand experience — offline community</td>
+          <td><div class="budget-bar-wrap"><div class="budget-bar-bg"><div class="budget-bar-fill" style="width:14%"></div></div><span class="budget-pct">5%</span></div></td>
+          <td>£15.6M retail revenue FY2024 (+30.4% YoY)</td>
+          <td><span class="data-tag tag-verified">Verified</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text-muted); margin-top: 1rem;">* Budget % estimated from publicly reported strategy. Gymshark does not disclose channel-level spend in Companies House filings.</p>
+  </div>
+</section>
+
+<!-- 03 BENCHMARKS -->
+<section id="benchmarks">
+  <p class="section-label">03 — Benchmark Analysis</p>
+  <h2>How Gymshark stacks up against the market.</h2>
+  <p class="section-intro">Numbers only mean something in context. Here's how Gymshark's key metrics compare against industry benchmarks — and what each gap actually tells us.</p>
+
+  <div class="benchmark-grid">
+    <div class="benchmark-card scroll-reveal">
+      <div class="benchmark-metric">Gross Profit Margin</div>
+      <div class="benchmark-compare">
+        <div class="benchmark-item"><span class="benchmark-val val-up">63%</span><div class="benchmark-who">Gymshark</div></div>
+        <div class="benchmark-vs">vs</div>
+        <div class="benchmark-item"><span class="benchmark-val val-neutral">50%</span><div class="benchmark-who">Industry Avg</div></div>
+      </div>
+      <div class="benchmark-bar"><div class="benchmark-fill fill-up" style="width:85%"></div></div>
+      <div class="benchmark-gap-label" style="color: var(--green)">+13pp above benchmark ✓</div>
+      <div class="benchmark-insight">Gymshark keeps more of every sale than competitors. Their lean DTC model means no wholesale middlemen eating into margin. This headroom is what funds aggressive marketing investment — and why profitability discussions need to factor in Adjusted EBITDA, not just net margin.</div>
+    </div>
+
+    <div class="benchmark-card scroll-reveal">
+      <div class="benchmark-metric">Email Open Rate</div>
+      <div class="benchmark-compare">
+        <div class="benchmark-item"><span class="benchmark-val val-up">30%</span><div class="benchmark-who">Gymshark avg</div></div>
+        <div class="benchmark-vs">vs</div>
+        <div class="benchmark-item"><span class="benchmark-val val-neutral">21%</span><div class="benchmark-who">Industry Avg</div></div>
+      </div>
+      <div class="benchmark-bar"><div class="benchmark-fill fill-up" style="width:75%"></div></div>
+      <div class="benchmark-gap-label" style="color: var(--green)">+9pp above benchmark ✓</div>
+      <div class="benchmark-insight">Nearly 1 in 3 Gymshark email subscribers open their emails vs 1 in 5 industry-wide. This is a loyalty signal — their community genuinely wants to hear from them. Their Klaviyo lifecycle segmentation is working and should be protected as a retention channel.</div>
+    </div>
+
+    <div class="benchmark-card scroll-reveal">
+      <div class="benchmark-metric">TikTok ROAS Uplift</div>
+      <div class="benchmark-compare">
+        <div class="benchmark-item"><span class="benchmark-val val-up">+39%</span><div class="benchmark-who">Gymshark</div></div>
+        <div class="benchmark-vs">vs</div>
+        <div class="benchmark-item"><span class="benchmark-val val-neutral">+13%</span><div class="benchmark-who">Cross-channel Avg</div></div>
+      </div>
+      <div class="benchmark-bar"><div class="benchmark-fill fill-up" style="width:80%"></div></div>
+      <div class="benchmark-gap-label" style="color: var(--green)">+26pp above benchmark ✓</div>
+      <div class="benchmark-insight">TikTok delivering nearly 3x the average channel ROAS improvement. UGC athlete content drove 2.4x ROAS vs studio ads. This validates the creator-led strategy and makes TikTok a priority to protect in any budget review — especially as the channel that builds upper-funnel demand.</div>
+    </div>
+
+    <div class="benchmark-card scroll-reveal">
+      <div class="benchmark-metric">Snapchat ROAS Uplift</div>
+      <div class="benchmark-compare">
+        <div class="benchmark-item"><span class="benchmark-val val-up">+58%</span><div class="benchmark-who">Gymshark</div></div>
+        <div class="benchmark-vs">vs</div>
+        <div class="benchmark-item"><span class="benchmark-val val-neutral">+13%</span><div class="benchmark-who">Cross-channel Avg</div></div>
+      </div>
+      <div class="benchmark-bar"><div class="benchmark-fill fill-up" style="width:92%"></div></div>
+      <div class="benchmark-gap-label" style="color: var(--green)">+45pp above benchmark 🚀</div>
+      <div class="benchmark-insight">The hidden gem. Snapchat delivers the highest ROAS uplift of any measured channel at +58% — yet receives an estimated 5% of budget. This mismatch between performance and investment is the clearest reallocation opportunity in this analysis. It was invisible before Fospha's MMM surfaced it.</div>
+    </div>
+
+    <div class="benchmark-card scroll-reveal">
+      <div class="benchmark-metric">US Revenue Growth YoY</div>
+      <div class="benchmark-compare">
+        <div class="benchmark-item"><span class="benchmark-val val-down">+0.2%</span><div class="benchmark-who">Gymshark</div></div>
+        <div class="benchmark-vs">vs</div>
+        <div class="benchmark-item"><span class="benchmark-val val-neutral">+10%</span><div class="benchmark-who">Market Growth</div></div>
+      </div>
+      <div class="benchmark-bar"><div class="benchmark-fill fill-down" style="width:55%"></div></div>
+      <div class="benchmark-gap-label" style="color: var(--red)">-10pp below market ⚠</div>
+      <div class="benchmark-insight">The most urgent metric in this report. Gymshark's largest market (41% of revenue) barely grew while the industry expanded ~10%. The UK proves the brand isn't broken — so something specific to the US marketing strategy or channel mix isn't performing. This requires channel-level diagnostic data to diagnose properly.</div>
+    </div>
+
+    <div class="benchmark-card scroll-reveal">
+      <div class="benchmark-metric">Influencer Revenue Attribution</div>
+      <div class="benchmark-compare">
+        <div class="benchmark-item"><span class="benchmark-val val-up">~30%</span><div class="benchmark-who">Gymshark</div></div>
+        <div class="benchmark-vs">vs</div>
+        <div class="benchmark-item"><span class="benchmark-val val-neutral">17%</span><div class="benchmark-who">Industry Avg</div></div>
+      </div>
+      <div class="benchmark-bar"><div class="benchmark-fill fill-up" style="width:68%"></div></div>
+      <div class="benchmark-gap-label" style="color: var(--green)">+13pp above benchmark ✓</div>
+      <div class="benchmark-insight">Long-term athlete partnerships drive nearly double the industry average in attributed revenue. The compounding effect of multi-year creator relationships — building authentic association rather than one-off campaigns — is a genuine competitive moat that most brands can't replicate quickly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 OPPORTUNITY -->
+<section id="opportunity">
+  <p class="section-label">04 — Areas of Opportunity</p>
+  <h2>Three things worth paying close attention to.</h2>
+  <p class="section-intro">These aren't problems to panic about — they're opportunities to act on. Each one has a clear path forward, and each one becomes clearer with better measurement.</p>
+
+  <div class="opportunity-grid">
+    <div class="opportunity-card opp-orange scroll-reveal">
+      <span class="opp-emoji">🇺🇸</span>
+      <div class="opp-title">The US deserves a fresh look</div>
+      <div class="opp-body">
+        US revenue grew +0.2% while the market grew ~10%. Gymshark's largest territory is effectively standing still. The UK proves the brand works — so what's different in the US?
+        <br><br>
+        Without channel-level measurement by region, there's no way to tell whether the issue is too much spend going to saturated Meta audiences, not enough upper-funnel TikTok investment, or a post-restructuring gap after the Denver office closure. You can't fix what you can't see.
+        <br><br>
+        The NYC office relocation signals leadership is serious about US growth. The next step is regional ROAS data by channel — to rebuild the US media mix with evidence rather than intuition.
+      </div>
+      <span class="opp-impact impact-orange">Priority: High — 41% of revenue at stake</span>
+    </div>
+
+    <div class="opportunity-card opp-teal scroll-reveal">
+      <span class="opp-emoji">⚡</span>
+      <div class="opp-title">Snapchat is wildly underinvested</div>
+      <div class="opp-body">
+        This is the clearest data-backed opportunity. Snapchat delivered a +58% ROAS uplift — the highest of any measured channel — yet receives an estimated 5% of media budget.
+        <br><br>
+        Here's why this happens without unified measurement: Snapchat rarely gets the last click. Someone sees a Gymshark ad on Snapchat, doesn't tap it, then searches Gymshark three days later and buys through Google. Traditional tracking credits Google. Snapchat gets nothing. Budget goes to Google. The demand that drove the purchase gets defunded.
+        <br><br>
+        Fospha's MMM measures the impression — not just the click — and statistically isolates Snapchat's true contribution. That's how the +58% became visible. Without it, this opportunity stays buried.
+      </div>
+      <span class="opp-impact impact-teal">Opportunity: Reallocation from saturated Meta → Snapchat</span>
+    </div>
+
+    <div class="opportunity-card opp-purple scroll-reveal">
+      <span class="opp-emoji">📊</span>
+      <div class="opp-title">£126M in spend, zero channel breakdown</div>
+      <div class="opp-body">
+        Gymshark spent £126M on distribution in FY2024. That's verified in their Companies House filing. What isn't in any public document is how that £126M breaks down by channel.
+        <br><br>
+        Each platform's dashboard gives its own version of truth. Meta says it drove 800 conversions. TikTok says 600. Snapchat says 300. Total: 1,700. Actual sales: 900. Everyone is double-counting the same customers.
+        <br><br>
+        The result is budget decisions made on platform-reported ROAS — which systematically overcredits whoever gets the last click. With a 63% gross margin, Gymshark has the financial capacity to invest in solving this properly. The question is whether the £126M is being directed toward the channels that actually create demand.
+      </div>
+      <span class="opp-impact impact-purple">Root cause: Attribution gap — solvable with MMM</span>
+    </div>
+  </div>
+</section>
+
+<!-- 05 MMM REGRESSION -->
+<section id="measurement">
+  <p class="section-label">05 — How Fospha Closes the Gap</p>
+  <h2>The measurement science behind the insight.</h2>
+  <p class="section-intro">Understanding how Fospha solves the attribution problem starts with the statistical model underneath it. This is genuinely elegant econometrics — applied to real marketing decisions.</p>
+
+  <div class="mmm-section scroll-reveal">
+    <div class="mmm-label">The Regression Model</div>
+    <div class="mmm-title">Revenue as the Dependent Variable</div>
+    <div class="mmm-intro">
+      At its core, Fospha's Media Mix Model is a multivariate regression — the same framework you'd study in econometrics. Revenue is the dependent variable (what we're trying to explain), and each channel's spend level is an independent variable (a potential driver of that revenue). The model estimates how much each channel actually contributes to revenue — statistically, while controlling for everything else happening simultaneously.
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">Fospha MMM — Core Regression Formula</div>
+      <div class="formula-main">
+        <span class="fv">Revenue (Y)</span> = β₀ +
+        <span class="fc">β₁</span>(<span class="fch">Meta Spend</span>) +
+        <span class="fc">β₂</span>(<span class="fch">TikTok Spend</span>) +
+        <span class="fc">β₃</span>(<span class="fch">Snapchat Spend</span>) +
+        <span class="fc">β₄</span>(<span class="fch">YouTube Spend</span>) +
+        <span class="fc">β₅</span>(<span class="fch">Influencer Spend</span>) +
+        <span class="fc">β₆</span>(<span class="fch">Email Sends</span>) +
+        <span class="fc">β₇</span>(<span class="fct">Seasonality</span>) +
+        <span class="fc">β₈</span>(<span class="fct">Price Index</span>) +
+        <span class="fc">β₉</span>(<span class="fct">Macro Conditions</span>) +
+        <span class="fe">ε</span>
+      </div>
+
+      <div class="formula-legend">
+        <div class="legend-item">
+          <div class="legend-sym" style="color: #00e5a0">Revenue Y — Dependent Variable</div>
+          <div class="legend-desc">What we're trying to explain and predict. Every pound of revenue Gymshark earns is the output this model is trained on — week by week, across regions and channels.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-sym" style="color: #f59e0b">β Coefficients</div>
+          <div class="legend-desc">What the model solves for. Each coefficient tells you: for every £1 more spent on this channel, how much incremental revenue does Gymshark generate? That number is the true ROAS — statistically isolated, not platform self-reported.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-sym" style="color: #60a5fa">Channel Spend — Independent Variables</div>
+          <div class="legend-desc">Each channel's weekly spend level is an input the model uses to separate and attribute revenue contribution. When TikTok spend goes up and revenue goes up, the model quantifies exactly how much of that lift belongs to TikTok.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-sym" style="color: #c084fc">Control Variables</div>
+          <div class="legend-desc">Seasonality (Black Friday), price changes, and macro conditions (inflation, consumer confidence) all affect revenue independently of marketing. Controlling for these isolates the true marketing effect from external noise.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-sym" style="color: #f87171">ε — Error Term</div>
+          <div class="legend-desc">The unexplained variation — the part of revenue the model can't attribute to any known variable. In a well-specified model this is small and randomly distributed, confirming the model isn't missing major drivers.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-sym" style="color: #94a3b8">Why Not Simple OLS?</div>
+          <div class="legend-desc">Standard OLS assumes linear relationships and no memory effects. Fospha uses Bayesian methods, adstock (lag effects), and saturation curves — making it far more accurate for the complex, overlapping reality of multi-channel marketing.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mmm-steps">
+      <div class="mmm-step">
+        <div class="mmm-step-num">Beyond Basic Regression — 01</div>
+        <div class="mmm-step-title">Adstock: Marketing Has Memory</div>
+        <div class="mmm-step-body">A TikTok impression today might drive a purchase three weeks from now. Simple regression misses this entirely. Fospha models the carry-over effect of every channel so delayed conversions get attributed to the channel that created the demand — not just the one that happened to be last in the customer journey.</div>
+      </div>
+      <div class="mmm-step">
+        <div class="mmm-step-num">Beyond Basic Regression — 02</div>
+        <div class="mmm-step-title">Saturation Curves: Diminishing Returns</div>
+        <div class="mmm-step-body">Doubling Snapchat spend doesn't double revenue — at some point audiences saturate. Fospha uses Bayesian S-shaped saturation curves (not linear) to model exactly where each channel's returns start diminishing. This tells Gymshark precisely how far each channel's budget can go before efficiency drops off.</div>
+      </div>
+      <div class="mmm-step">
+        <div class="mmm-step-num">Beyond Basic Regression — 03</div>
+        <div class="mmm-step-title">Daily Outputs: Act This Week, Not Next Quarter</div>
+        <div class="mmm-step-body">Traditional MMM is run quarterly by consultants. By the time the report lands, the campaign is long over. Fospha runs the model daily at the ad level — so Gymshark's team can see on Tuesday that Snapchat ROAS jumped 40% and shift budget by Wednesday. That's the actionability gap, closed.</div>
+      </div>
+    </div>
+
+    <div class="gymshark-proof">
+      <div class="proof-label">Proof in Practice — Gymshark x Fospha x Smartly (Nov 2025, verified)</div>
+      <div class="proof-text">
+        When Gymshark integrated Fospha's full-funnel MMM data directly into Smartly's Predictive Budget Allocation tool, the results were measurable: <strong>+13% overall ROAS uplift across Meta, TikTok, Snapchat, and Pinterest. +39% on TikTok specifically. +58% on Snapchat.</strong> Gymshark's Head of Digital Marketing Daniel Green confirmed the integration "eliminated excessive time spent on budget decisions allowing us to focus more on creative strategy and growth." This is the regression formula above working in practice — coefficients estimated daily, budgets reallocated automatically, revenue improved measurably.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 RECOMMENDATIONS -->
+<section id="recommendations">
+  <p class="section-label">06 — Strategic Recommendations</p>
+  <h2>Three moves that move the needle.</h2>
+  <p class="section-intro">Every recommendation here is tied directly to verified data in this report. Specific actions, specific rationale, specific expected outcomes — not generic marketing advice.</p>
+
+  <div class="rec-grid">
+    <div class="rec-card scroll-reveal" style="--rec-color: var(--teal)">
+      <div class="rec-number">01</div>
+      <div class="rec-title">Increase Snapchat budget allocation by 5-10pp</div>
+      <div class="rec-body">Snapchat is delivering +58% ROAS uplift on an estimated 5% of budget. The mismatch between performance and investment is the clearest budget reallocation opportunity in this analysis. The most likely source of reallocation is Meta retargeting — where audience saturation becomes a real risk at an estimated 35% budget share.</div>
+      <div class="rec-outcome"><strong>Expected outcome:</strong> If Snapchat maintains near-current ROAS efficiency at higher spend (validate with an incrementality test first), a 5pp reallocation from Meta could meaningfully improve overall blended ROAS across the paid mix — with no increase in total spend.</div>
+      <div class="rec-tool">Tool: Fospha MMM → Beam (incremental forecasting) → Smartly PBA for automated reallocation</div>
+    </div>
+
+    <div class="rec-card scroll-reveal" style="--rec-color: var(--accent)">
+      <div class="rec-number">02</div>
+      <div class="rec-title">Run a US channel-level diagnostic with Fospha</div>
+      <div class="rec-body">US revenue growing +0.2% vs a market growing +10% cannot be diagnosed from public data. The question — paid media misallocation, brand awareness gap, or post-restructuring lag — requires regional channel ROAS data that only unified MMM can provide. Without it, any US strategy rebuild is educated guesswork at best.</div>
+      <div class="rec-outcome"><strong>Expected outcome:</strong> Regional Fospha data surfaces whether the US underperformance is concentrated in specific channels (Meta saturation? Insufficient TikTok upper funnel?) or reflects a systemic awareness gap — enabling a targeted, evidence-based rebuild rather than a broad budget increase.</div>
+      <div class="rec-tool">Tool: Fospha Core → Regional channel ROAS breakdown → US-specific media mix rebuild</div>
+    </div>
+
+    <div class="rec-card scroll-reveal" style="--rec-color: var(--purple)">
+      <div class="rec-number">03</div>
+      <div class="rec-title">Protect TikTok and scale UGC creative systematically</div>
+      <div class="rec-body">TikTok is delivering +39% ROAS uplift — nearly 3x the cross-channel average. More importantly, it's the primary demand generation channel for Gymshark's core Gen Z demographic. UGC-style athlete creative drove 2.4x ROAS vs studio ads. Any budget review that cuts TikTok in pursuit of short-term Meta efficiency is trading long-term demand for short-term attribution comfort.</div>
+      <div class="rec-outcome"><strong>Expected outcome:</strong> Protecting TikTok while Fospha's impression-based MMM properly credits its upper-funnel contribution prevents the most common DTC measurement mistake: defunding the channel that builds demand because it never gets the last click — only to see Meta conversions mysteriously drop six weeks later.</div>
+      <div class="rec-tool">Tool: Fospha Core → Impression modeling → TikTok Spark Ads + UGC creative scaling</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<div class="sources-section">
+  <div class="sources-title">Sources & Data Integrity</div>
+  <ul class="sources-list">
+    <li><a href="https://find-and-update.company-information.service.gov.uk" target="_blank">Gymshark Group Limited FY2024 Annual Report — Companies House (filed 28 Apr 2025). All financial data: revenue, margin, costs, geographic and channel split.</a></li>
+    <li><a href="https://www.smartly.io/resources/gymshark-achieves-a-13-uplift-in-roas" target="_blank">Gymshark x Smartly x Fospha Case Study — smartly.io (Nov 2025). All ROAS uplift figures: verified primary source with named executive quote.</a></li>
+    <li><a href="https://www.klaviyo.com/marketing-resources/email-benchmarks-by-industry-2024" target="_blank">Klaviyo Email Benchmarks by Industry 2024 — klaviyo.com. Industry email open rate benchmark for retail/apparel.</a></li>
+    <li><a href="https://www.tacticone.co/blog/gymshark-marketing-strategy" target="_blank">Gymshark Marketing Strategy Analysis — tacticone.co. Email open rate, influencer attribution, and channel strategy detail (secondary source).</a></li>
+    <li>Influencer Marketing Hub 2024 — Industry influencer revenue attribution benchmarks.</li>
+    <li>Statista Activewear Market Growth Report 2024 — Market growth rate benchmark (8-12%).</li>
+    <li>McKinsey Apparel Industry Benchmark — Gross margin range for activewear (45-55%).</li>
+    <li style="color: var(--accent)">Note: Budget allocation percentages are analyst estimates based on publicly reported strategy. All estimated figures are clearly labeled throughout this report. Gymshark does not disclose channel-level ad spend in public filings.</li>
+  </ul>
+</div>
+
+<div class="analyst-bar">
+  <p>Prepared by <a href="index.html">Jovanna Garza</a> — Marketing Analytics Portfolio · <a href="https://www.linkedin.com/in/jovannagarza/" target="_blank">LinkedIn</a></p>
+  <p>All financial data from primary filings. Estimated figures clearly labeled. © 2025</p>
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+  // Chart setup
+  Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+  Chart.defaults.color = '#94a3b8';
+
+  const ac = '#ff6b35', teal = '#0d9488', blue = '#3b82f6',
+        purple = '#8b5cf6', yellow = '#f59e0b', green = '#10b981',
+        border = '#e8e3db', pink = '#f43f5e';
+
+  // US vs UK vs Market benchmark growth chart
+  new Chart(document.getElementById('benchmarkGrowthChart'), {
+    type: 'bar',
+    data: {
+      labels: ['United States', 'United Kingdom'],
+      datasets: [
+        {
+          label: 'Gymshark Growth',
+          data: [0.2, 22.1],
+          backgroundColor: ['rgba(239,68,68,0.85)', 'rgba(16,185,129,0.85)'],
+          borderColor: ['#ef4444', '#10b981'],
+          borderWidth: 2,
+          borderRadius: 8,
+        },
+        {
+          label: 'Activewear Market Benchmark',
+          data: [10, 10],
+          backgroundColor: ['rgba(148,163,184,0.25)', 'rgba(148,163,184,0.25)'],
+          borderColor: ['#94a3b8', '#94a3b8'],
+          borderWidth: 2,
+          borderRadius: 8,
+          borderDash: [5, 5],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { font: { size: 11 }, boxWidth: 14 } },
+        tooltip: { callbacks: { label: c => ` ${c.dataset.label}: +${c.raw}% YoY` } },
+        annotation: {}
+      },
+      scales: {
+        x: { grid: { color: border }, ticks: { font: { size: 12, weight: '600' } } },
+        y: {
+          grid: { color: border },
+          ticks: { callback: v => `+${v}%`, font: { size: 11 } },
+          min: 0,
+          max: 28,
+          title: { display: true, text: 'Revenue Growth YoY (%)', font: { size: 10 }, color: '#94a3b8' }
+        }
+      }
+    }
+  });
+
+  // Revenue bar
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
+    data: {
+      labels: ['FY2022', 'FY2023', 'FY2024'],
+      datasets: [{
+        data: [484476, 556216, 607345],
+        backgroundColor: ['rgba(255,107,53,0.2)', 'rgba(255,107,53,0.5)', 'rgba(255,107,53,0.9)'],
+        borderColor: ac, borderWidth: 2, borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` £${(c.raw/1000).toFixed(1)}M` } } },
+      scales: {
+        x: { grid: { color: border }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: border }, ticks: { callback: v => `£${(v/1000).toFixed(0)}M`, font: { size: 11 } } }
+      }
+    }
+  });
+
+  // Geo bar
+  new Chart(document.getElementById('geoChart'), {
+    type: 'bar',
+    data: {
+      labels: ['US', 'Europe ex-UK', 'UK', 'Rest of World'],
+      datasets: [
+        { label: 'FY2024', data: [251044, 145736, 136469, 74096], backgroundColor: ac, borderRadius: 5 },
+        { label: 'FY2023', data: [250491, 129411, 111727, 64587], backgroundColor: 'rgba(255,107,53,0.2)', borderColor: ac, borderWidth: 1, borderRadius: 5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { font: { size: 10 }, boxWidth: 12 } }, tooltip: { callbacks: { label: c => ` £${(c.raw/1000).toFixed(1)}M` } } },
+      scales: {
+        x: { grid: { color: border }, ticks: { font: { size: 10 } } },
+        y: { grid: { color: border }, ticks: { callback: v => `£${(v/1000).toFixed(0)}M`, font: { size: 10 } } }
+      }
+    }
+  });
+
+  // Channel donut
+  new Chart(document.getElementById('channelChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Meta', 'TikTok', 'Influencer', 'YouTube', 'Snapchat', 'Email', 'Retail'],
+      datasets: [{
+        data: [35, 20, 20, 10, 5, 5, 5],
+        backgroundColor: [ac, blue, yellow, purple, green, teal, pink],
+        borderColor: '#faf8f5', borderWidth: 3, hoverOffset: 10
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: {
+        legend: { position: 'right', labels: { font: { size: 10 }, boxWidth: 12, padding: 10 } },
+        tooltip: { callbacks: { label: c => ` ${c.label}: ${c.raw}% est.` } }
+      }
+    }
+  });
+
+  // ROAS horizontal bar
+  new Chart(document.getElementById('roasChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Snapchat', 'TikTok', 'Overall avg', 'Meta'],
+      datasets: [{
+        data: [58, 39, 13, 13],
+        backgroundColor: [green, blue, 'rgba(148,163,184,0.3)', 'rgba(255,107,53,0.3)'],
+        borderColor: [green, blue, '#94a3b8', ac],
+        borderWidth: 2, borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` +${c.raw}% ROAS uplift` } } },
+      scales: {
+        x: { grid: { color: border }, ticks: { callback: v => `+${v}%`, font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
