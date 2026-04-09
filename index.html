@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jovanna Garza — Marketing Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --surface: #ffffff;
+    --surface2: #f5f2ee;
+    --border: #e8e2d9;
+    --coral: #ff6b6b;
+    --orange: #ff9f43;
+    --yellow: #ffd93d;
+    --mint: #6bcb77;
+    --sky: #4ecdc4;
+    --lavender: #a78bfa;
+    --pink: #f72585;
+    --text: #1a1a2e;
+    --text-muted: #9b8fa0;
+    --text-dim: #6b6078;
+    --accent: #ff6b6b;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; font-weight: 400; line-height: 1.7; overflow-x: hidden; cursor: none; }
+
+  .cursor { width: 12px; height: 12px; background: var(--coral); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease, background 0.2s ease; transform: translate(-50%, -50%); }
+  .cursor-follower { width: 32px; height: 32px; border: 2px solid var(--coral); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transition: transform 0.35s ease, opacity 0.2s ease; transform: translate(-50%, -50%); opacity: 0.5; }
+
+  .blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.1; pointer-events: none; z-index: 0; animation: blobFloat 8s ease-in-out infinite; }
+  .blob-1 { width: 400px; height: 400px; background: var(--coral); top: -100px; right: -100px; }
+  .blob-2 { width: 300px; height: 300px; background: var(--sky); bottom: 20%; left: -80px; animation-delay: 3s; }
+  .blob-3 { width: 250px; height: 250px; background: var(--yellow); top: 50%; right: 10%; animation-delay: 6s; }
+  @keyframes blobFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.2rem 4rem; display: flex; justify-content: space-between; align-items: center; background: rgba(250,248,245,0.88); backdrop-filter: blur(16px); border-bottom: 2px solid transparent; transition: border-color 0.3s; }
+  nav.scrolled { border-color: var(--border); }
+  .nav-logo { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+  .nav-logo span { color: var(--coral); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-dim); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; right: 0; height: 2px; background: var(--coral); transform: scaleX(0); transform-origin: left; transition: transform 0.25s ease; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  .hero { min-height: 100vh; padding: 8rem 4rem 4rem; position: relative; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+  .hero-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--coral); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; animation: fadeUp 0.6s ease both; }
+  .hero-tag::before { content: ''; display: inline-block; width: 24px; height: 2px; background: var(--coral); }
+  .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 5vw, 5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; color: var(--text); animation: fadeUp 0.6s ease 0.1s both; max-width: 900px; }
+  .hero h1 .highlight { position: relative; display: inline-block; color: var(--coral); }
+  .hero h1 .highlight::after { content: ''; position: absolute; bottom: 4px; left: 0; right: 0; height: 6px; background: var(--yellow); opacity: 0.5; z-index: -1; border-radius: 2px; }
+  .hero-sub { font-size: 1.05rem; color: var(--text-dim); max-width: 560px; margin-top: 1.5rem; font-weight: 400; animation: fadeUp 0.6s ease 0.2s both; }
+  .hero-cta { display: flex; gap: 1rem; margin-top: 2.5rem; animation: fadeUp 0.6s ease 0.3s both; flex-wrap: wrap; }
+  .btn-primary { background: var(--coral); color: white; padding: 0.8rem 2rem; border-radius: 100px; text-decoration: none; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.02em; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(255,107,107,0.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,107,107,0.4); }
+  .btn-ghost { border: 2px solid var(--border); color: var(--text); padding: 0.8rem 2rem; border-radius: 100px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: border-color 0.2s, background 0.2s; }
+  .btn-ghost:hover { border-color: var(--coral); background: rgba(255,107,107,0.05); }
+  .hero-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 3rem; animation: fadeUp 0.6s ease 0.4s both; }
+  .chip { background: var(--surface); border: 2px solid var(--border); border-radius: 100px; padding: 0.35rem 1rem; font-size: 0.75rem; font-weight: 600; color: var(--text-dim); letter-spacing: 0.02em; transition: all 0.2s; }
+  .chip:hover { border-color: var(--coral); color: var(--coral); transform: translateY(-2px); }
+  .chip.coral { border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.06); color: var(--coral); }
+  .chip.sky { border-color: rgba(78,205,196,0.3); background: rgba(78,205,196,0.06); color: var(--sky); }
+  .chip.mint { border-color: rgba(107,203,119,0.3); background: rgba(107,203,119,0.06); color: var(--mint); }
+  .chip.lavender { border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.06); color: var(--lavender); }
+  .chip.orange { border-color: rgba(255,159,67,0.3); background: rgba(255,159,67,0.06); color: var(--orange); }
+
+  section { padding: 6rem 4rem; position: relative; z-index: 1; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--coral); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+  .section-label::before { content: ''; display: inline-block; width: 16px; height: 2px; background: var(--coral); }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; color: var(--text); margin-bottom: 1.2rem; }
+  .section-title em { font-style: italic; color: var(--coral); font-weight: 700; }
+  .section-desc { font-size: 0.95rem; color: var(--text-dim); max-width: 560px; line-height: 1.8; }
+
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .experience-item { padding: 1.2rem 0; border-bottom: 1px solid var(--border); }
+  .experience-item:last-child { border-bottom: none; }
+  .exp-role { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+  .exp-company { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--coral); letter-spacing: 0.08em; margin: 0.2rem 0; }
+  .exp-desc { font-size: 0.82rem; color: var(--text-dim); }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1rem; }
+  .skill-card { background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 1.2rem; transition: border-color 0.2s, transform 0.2s; }
+  .skill-card:hover { border-color: var(--coral); transform: translateY(-3px); }
+  .skill-card-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--coral); margin-bottom: 0.5rem; }
+  .skill-card-list { font-size: 0.78rem; color: var(--text-dim); line-height: 1.8; }
+
+  .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .project-card { background: var(--surface); border: 2px solid var(--border); border-radius: 20px; padding: 1.8rem; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; position: relative; overflow: hidden; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--coral), var(--orange)); opacity: 0; transition: opacity 0.25s; }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(255,107,107,0.3); box-shadow: 0 20px 60px rgba(255,107,107,0.1); }
+  .project-card:hover::before { opacity: 1; }
+  .project-card.wip { opacity: 0.75; }
+  .project-card.wip:hover { opacity: 1; }
+  .project-number { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .project-category { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--coral); margin-bottom: 0.5rem; }
+  .project-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0.8rem; line-height: 1.3; }
+  .project-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 1rem; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+  .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 0.2rem 0.7rem; font-size: 0.68rem; font-weight: 600; color: var(--text-dim); letter-spacing: 0.03em; }
+  .project-status { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; }
+  .status-complete { color: var(--mint); }
+  .status-wip { color: var(--orange); }
+  .status-planned { color: var(--text-muted); }
+  .project-link { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--coral); text-decoration: none; border: 1.5px solid rgba(255,107,107,0.3); padding: 0.3rem 0.8rem; border-radius: 100px; transition: background 0.2s, border-color 0.2s; display: inline-block; }
+  .project-link:hover { background: rgba(255,107,107,0.08); border-color: var(--coral); }
+
+  .process-card { background: var(--surface); border: 2px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 1.5rem; }
+  .process-card-header { padding: 1.5rem 2rem; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(255,107,107,0.04), rgba(78,205,196,0.04)); }
+  .process-card-body { padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .process-step { display: flex; gap: 1rem; align-items: flex-start; padding: 0.8rem 0; border-bottom: 1px solid var(--border); }
+  .process-step:last-child { border-bottom: none; }
+  .step-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--coral); min-width: 24px; padding-top: 0.1rem; }
+  .step-text { font-size: 0.82rem; color: var(--text-dim); line-height: 1.7; }
+  .formula-box { background: linear-gradient(135deg, rgba(255,107,107,0.06), rgba(255,159,67,0.06)); border: 2px solid rgba(255,107,107,0.2); border-radius: 16px; padding: 1.2rem; margin-top: 1rem; }
+  .formula-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); margin-bottom: 0.5rem; }
+  .formula-text { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--coral); line-height: 1.8; }
+
+  .approach { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+  .approach-steps { display: flex; flex-direction: column; gap: 0; }
+  .approach-step { display: flex; gap: 1.5rem; align-items: flex-start; padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+  .approach-step:last-child { border-bottom: none; }
+  .step-circle { width: 40px; height: 40px; min-width: 40px; background: linear-gradient(135deg, var(--coral), var(--orange)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 500; color: white; }
+  .step-content h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+  .step-content p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.75; }
+
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .contact-right { display: flex; flex-direction: column; gap: 0; }
+  .contact-link { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.9rem; transition: color 0.2s, padding-left 0.2s; }
+  .contact-link:last-child { border-bottom: none; }
+  .contact-link:hover { color: var(--coral); padding-left: 0.5rem; }
+  .contact-link-arrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--coral); }
+
+  footer { border-top: 2px solid var(--border); padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; }
+  footer p { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--text-muted); }
+
+  .mantra-banner { background: linear-gradient(135deg, var(--coral), var(--orange)); padding: 2rem 4rem; text-align: center; }
+  .mantra-banner p { font-family: 'Syne', sans-serif; font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 800; color: white; letter-spacing: 0.02em; }
+  .mantra-banner em { font-style: italic; opacity: 0.85; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { opacity: 1; transform: translateY(0); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.animate { opacity: 0; transform: translateY(20px); }
+  .fade-in.animate.visible { opacity: 1; transform: translateY(0); }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--coral); border-radius: 2px; }
+
+  @media (max-width: 900px) {
+    body { cursor: auto; }
+    .cursor, .cursor-follower { display: none; }
+    nav { padding: 1.2rem 2rem; }
+    section { padding: 4rem 2rem; }
+    .hero { padding: 7rem 2rem 3rem; }
+    .about, .contact, .approach { grid-template-columns: 1fr; gap: 3rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .process-card-body { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .mantra-banner { padding: 1.5rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<nav id="navbar">
+  <a href="#" class="nav-logo">JG<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <p class="hero-tag">Marketing Analytics Portfolio</p>
+  <h1>Turning <span class="highlight">data</span> into<br>decisions that<br>grow brands.</h1>
+  <p class="hero-sub">I'm Jovanna Garza — an economics grad from UT Austin who fell in love with marketing analytics. I make ideas come to life through data, code, and a lot of curiosity.</p>
+  <div class="hero-cta">
+    <a href="#work" class="btn-primary">View Projects →</a>
+    <a href="#contact" class="btn-ghost">Get in Touch</a>
+  </div>
+  <div class="hero-chips">
+    <span class="chip coral">Google Places API</span>
+    <span class="chip sky">Python</span>
+    <span class="chip mint">Tableau</span>
+    <span class="chip lavender">Excel</span>
+    <span class="chip orange">Marketing Analytics</span>
+    <span class="chip">Austin, TX</span>
+    <span class="chip">UT Austin Economics</span>
+  </div>
+</section>
+
+<div class="mantra-banner">
+  <p>"You cannot manage what you don't measure." <em>— that's why I measure everything.</em></p>
+</div>
+
+<section class="about fade-in" id="about">
+  <div>
+    <p class="section-label">About</p>
+    <h2 class="section-title">Analytics meets<br><em>creativity.</em></h2>
+    <p class="section-desc">I graduated from UT Austin with a degree in Economics and a minor in Business — and somewhere between the econometrics coursework and real-world problem-solving, marketing analytics became my obsession.</p>
+    <p class="section-desc" style="margin-top:1rem;">I started by solving my own problems with data, then realized I could help others do the same — especially small businesses with great products and zero visibility into what's actually working. I love making ideas come to life: give me a data question and I'll build something that answers it.</p>
+    <div style="margin-top:2rem;">
+      <div class="experience-item">
+        <div class="exp-role">Media Monitoring Analyst Intern</div>
+        <div class="exp-company">Penta Group</div>
+        <div class="exp-desc">Managed 16 client accounts simultaneously including Affirm, KPMG, Google News, Business Roundtable, SoFi, and Solana. Built AI-assisted reporting workflows, Boolean search frameworks, and client tracking systems. Selected as Intern of the Month.</div>
+      </div>
+      <div class="experience-item">
+        <div class="exp-role">IBM Data Science Professional Certificate</div>
+        <div class="exp-company">IBM · April 2025</div>
+        <div class="exp-desc">Built dashboards and analyses using Python — including a SpaceX Landing Prediction and Stock Analysis Dashboard.</div>
+      </div>
+      <div class="experience-item">
+        <div class="exp-role">Marketing Analytics Certificate</div>
+        <div class="exp-company">Meta · April 2025</div>
+        <div class="exp-desc">A/B testing, attribution modeling, and marketing mix concepts to assess campaign performance and inform optimization decisions.</div>
+      </div>
+      <div class="experience-item">
+        <div class="exp-role">B.S. Economics, Minor in Business</div>
+        <div class="exp-company">UT Austin — Graduated August 2025</div>
+        <div class="exp-desc">Econometrics, causal inference, data science, marketing strategy, consumer behavior research.</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="section-label">Toolkit</p>
+    <div class="skills-grid">
+      <div class="skill-card"><div class="skill-card-title">Analysis</div><div class="skill-card-list">Excel · Python<br>SQL (learning)<br>Google Analytics 4</div></div>
+      <div class="skill-card"><div class="skill-card-title">Visualization</div><div class="skill-card-list">Tableau<br>HTML/CSS<br>Chart.js</div></div>
+      <div class="skill-card"><div class="skill-card-title">Measurement</div><div class="skill-card-list">MMM Fundamentals<br>Attribution Models<br>Incrementality</div></div>
+      <div class="skill-card"><div class="skill-card-title">Channels</div><div class="skill-card-list">Meta Ads<br>TikTok · Paid Social<br>DTC · Amazon</div></div>
+      <div class="skill-card"><div class="skill-card-title">APIs & Data</div><div class="skill-card-list">Google Places API<br>Python (requests)<br>pandas · dotenv</div></div>
+      <div class="skill-card"><div class="skill-card-title">Strategy</div><div class="skill-card-list">Full-Funnel Analysis<br>CAC / ROAS / LTV<br>Competitive Research</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="work fade-in" id="work">
+  <p class="section-label">Selected Work</p>
+  <h2 class="section-title">Projects that <em>answer<br>real questions.</em></h2>
+  <p class="section-desc">Each project is built around a specific marketing problem — sourced from real data, cleaned, analyzed, and turned into a recommendation.</p>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-number">01</div>
+      <div class="project-category">Enterprise · Beauty</div>
+      <div class="project-title">e.l.f. Cosmetics Full-Funnel Analysis</div>
+      <div class="project-desc">Channel performance breakdown covering TikTok, paid social, DTC, and Amazon. Measurement gap identification and ROAS optimization recommendations built from SEC filings and verified benchmarks.</div>
+      <div class="project-tags"><span class="tag">MMM</span><span class="tag">TikTok</span><span class="tag">ROAS</span><span class="tag">Attribution</span><span class="tag">Excel</span></div>
+      <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;margin-top:0.5rem;">
+        <a href="elf_cosmetics_analysis.html" target="_blank" class="project-link">↗ View Report</a>
+        <span class="project-status status-complete">● Complete</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-number">02</div>
+      <div class="project-category">Enterprise · Fitness</div>
+      <div class="project-title">Gymshark Client Insight Report</div>
+      <div class="project-desc">Fospha-inspired client insight report for Gymshark's marketing team. Full-funnel channel analysis, ad investment recommendations, and incremental growth opportunities from Companies House FY2024 filing.</div>
+      <div class="project-tags"><span class="tag">Incrementality</span><span class="tag">Paid Social</span><span class="tag">TikTok Shop</span><span class="tag">CAC</span><span class="tag">Excel</span></div>
+      <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;margin-top:0.5rem;">
+        <a href="gymshark.html" target="_blank" class="project-link">↗ View Report</a>
+        <span class="project-status status-complete">● Complete</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-number">03</div>
+      <div class="project-category">Personal Project · Local Data</div>
+      <div class="project-title">Austin Eats: Restaurant Discovery Dashboard</div>
+      <div class="project-desc">End-to-end data pipeline: 230 Austin restaurants via Google Places API, cleaned in Python with custom neighborhood mapping across 20 Austin areas and a hidden gem scoring algorithm.</div>
+      <div class="project-tags"><span class="tag">Google Places API</span><span class="tag">Python</span><span class="tag">Tableau</span><span class="tag">Data Engineering</span></div>
+      <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;margin-top:0.5rem;">
+        <a href="https://public.tableau.com/app/profile/jovanna.garza/viz/AustinEats/AustinEatsMap" target="_blank" class="project-link">↗ View Dashboard</a>
+        <span class="project-status status-complete">● Complete</span>
+      </div>
+    </div>
+
+    <div class="project-card wip">
+      <div class="project-number">04</div>
+      <div class="project-category">Local Business · Beauty Retail</div>
+      <div class="project-title">Lip Lab Austin — Client Insight Report</div>
+      <div class="project-desc">Marketing analytics deep-dive for a local Austin beauty retail business. Channel performance, CAC strategy, and growth recommendations from public data and benchmarks.</div>
+      <div class="project-tags"><span class="tag">Local Business</span><span class="tag">Beauty Retail</span><span class="tag">CAC</span><span class="tag">Austin</span></div>
+      <span class="project-status status-wip">◐ In Progress</span>
+    </div>
+
+    <div class="project-card wip">
+      <div class="project-number">05</div>
+      <div class="project-category">Personal Project · Product</div>
+      <div class="project-title">Austin Eats App</div>
+      <div class="project-desc">Taking the Tableau dashboard further — a real mobile-friendly web app powered by Google Places API. View photos, read reviews, filter by vibe, get directions in one tap.</div>
+      <div class="project-tags"><span class="tag">Google Places API</span><span class="tag">Python</span><span class="tag">Web App</span><span class="tag">Product</span></div>
+      <span class="project-status status-planned">○ Planned</span>
+    </div>
+
+    <div class="project-card wip">
+      <div class="project-number">06</div>
+      <div class="project-category">Certification · In Progress</div>
+      <div class="project-title">Google Ads Certification</div>
+      <div class="project-desc">Working through Google's official Ads certification — campaign structure, bidding strategy, quality score, and measurement. Complements existing Meta Blueprint training.</div>
+      <div class="project-tags"><span class="tag">Google Ads</span><span class="tag">Paid Search</span><span class="tag">SEM</span><span class="tag">Measurement</span></div>
+      <span class="project-status status-wip">◐ In Progress</span>
+    </div>
+
+  </div>
+</section>
+
+<section class="fade-in" id="process">
+  <p class="section-label">Behind the Work</p>
+  <h2 class="section-title">Process, decisions,<br><em>and iterations.</em></h2>
+  <p class="section-desc">Every project has a story — the data gaps, the design choices, the things that didn't work the first time. This is that part.</p>
+
+  <div style="margin-top:3rem;">
+    <div class="process-card">
+      <div class="process-card-header">
+        <div>
+          <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;color:var(--coral);text-transform:uppercase;">Project 03</span>
+          <h3 style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-top:0.3rem;">Austin Eats — Building the Data Pipeline</h3>
+        </div>
+        <a href="https://public.tableau.com/app/profile/jovanna.garza/viz/AustinEats/AustinEatsMap" target="_blank" class="project-link">↗ Live Dashboard</a>
+      </div>
+      <div class="process-card-body">
+        <div>
+          <p style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:1rem;">The Story</p>
+          <div class="process-step">
+            <span class="step-num">01</span>
+            <p class="step-text">Started with Yelp API — hit a business email wall. Pivoted to Google Places (New), which turned out to have better data anyway.</p>
+          </div>
+          <div class="process-step">
+            <span class="step-num">02</span>
+            <p class="step-text">Pulled 230 restaurants across 12 cuisine types using Python. First clean showed 49 restaurants dumped into "Other Austin" — a data quality problem worth fixing.</p>
+          </div>
+          <div class="process-step">
+            <span class="step-num">03</span>
+            <p class="step-text">Rebuilt the neighborhood mapping using a full Austin zip code dictionary. Reduced "Other Austin" to zero across 20 distinct neighborhoods.</p>
+          </div>
+          <div class="process-step">
+            <span class="step-num">04</span>
+            <p class="step-text">Designed the hidden gem scoring algorithm to surface underrated spots over famous ones. Published to Tableau Public with live filters.</p>
+          </div>
+          <div style="margin-top:1.2rem;padding:1rem;background:rgba(255,107,107,0.05);border-radius:12px;border:1px solid rgba(255,107,107,0.15);">
+            <p style="font-size:0.78rem;color:var(--text-dim);line-height:1.7;"><strong style="color:var(--text);">Data limitation acknowledged:</strong> 58 of 230 restaurants had no price data from Google Places. Labeled "Unknown" — honest data beats clean-looking data.</p>
+          </div>
+        </div>
+        <div>
+          <p style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:1rem;">Stack & Output</p>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.82rem;color:var(--text-dim);padding:0.7rem 0;border-bottom:1px solid var(--border);"><span style="width:8px;height:8px;border-radius:50%;background:var(--coral);flex-shrink:0;"></span>Google Places API (New) — 230 restaurants</div>
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.82rem;color:var(--text-dim);padding:0.7rem 0;border-bottom:1px solid var(--border);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;"></span>Python (requests, pandas, dotenv)</div>
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.82rem;color:var(--text-dim);padding:0.7rem 0;border-bottom:1px solid var(--border);"><span style="width:8px;height:8px;border-radius:50%;background:var(--mint);flex-shrink:0;"></span>20 Austin neighborhoods mapped by zip code</div>
+            <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.82rem;color:var(--text-dim);padding:0.7rem 0;"><span style="width:8px;height:8px;border-radius:50%;background:var(--lavender);flex-shrink:0;"></span>Tableau Public — live interactive dashboard</div>
+          </div>
+          <div class="formula-box">
+            <p class="formula-label">Hidden Gem Scoring Algorithm</p>
+            <p class="formula-text">(rating × 20) −<br>(min(review_count, 1000) ÷ 50)</p>
+            <p style="font-size:0.75rem;color:var(--text-dim);margin-top:0.6rem;line-height:1.6;">High rating + low review count = underrated gem. Caps review count at 1,000 so mega-popular spots aren't unfairly tanked.</p>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <p style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.8rem;">Process Screenshots</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+              <div style="border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+                <img src="fixed_other_austin_problem_.jpg" alt="Fixed Other Austin neighborhood mapping" style="width:100%;display:block;">
+                <p style="font-size:0.68rem;color:var(--text-muted);padding:0.5rem;font-family:'DM Mono',monospace;">Neighborhood fix — zero Other Austin</p>
+              </div>
+              <div style="border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+                <img src="Csv_austin_restaurant.jpg" alt="Austin restaurant CSV data" style="width:100%;display:block;">
+                <p style="font-size:0.68rem;color:var(--text-muted);padding:0.5rem;font-family:'DM Mono',monospace;">Raw API data pull — 230 restaurants</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="process-card">
+      <div class="process-card-header">
+        <div>
+          <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;color:var(--coral);text-transform:uppercase;">Project 02</span>
+          <h3 style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-top:0.3rem;">Gymshark — Primary Source Research</h3>
+        </div>
+        <a href="gymshark.html" target="_blank" class="project-link">↗ View Report</a>
+      </div>
+      <div class="process-card-body">
+        <div>
+          <p style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:1rem;">Source Hierarchy</p>
+          <div class="process-step"><span class="step-num">01</span><p class="step-text">Primary source: Companies House FY2024 annual report — actual revenue, margins, and cost structure directly from Gymshark Group Limited's filing.</p></div>
+          <div class="process-step"><span class="step-num">02</span><p class="step-text">Channel data from Smartly x Gymshark case study — real TikTok ROAS uplift (+39%) and Snapchat data (+58%) from a verified campaign.</p></div>
+          <div class="process-step"><span class="step-num">03</span><p class="step-text">Benchmarks from Klaviyo 2024, Statista activewear market, and Influencer Marketing Hub — all labeled by verification tier in the Excel workbook.</p></div>
+        </div>
+        <div>
+          <p style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.8rem;">Process Screenshots</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+            <div style="border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+              <img src="Companies_House_2024_Gymshark_financials.jpg" alt="Gymshark Companies House financials" style="width:100%;display:block;">
+              <p style="font-size:0.68rem;color:var(--text-muted);padding:0.5rem;font-family:'DM Mono',monospace;">Companies House FY2024 filing</p>
+            </div>
+            <div style="border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+              <img src="Gymshark_Excel_benchmarks.jpg" alt="Gymshark Excel benchmarks tab" style="width:100%;display:block;">
+              <p style="font-size:0.68rem;color:var(--text-muted);padding:0.5rem;font-family:'DM Mono',monospace;">Excel benchmarks — sourced by tier</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+  <div>
+    <p class="section-label">Approach</p>
+    <h2 class="section-title">How I <em>work</em><br>through a problem.</h2>
+    <p class="section-desc">Every project follows the same discipline: start with a real question, find the right data, and don't stop until the answer is actionable.</p>
+  </div>
+  <div class="approach-steps">
+    <div class="approach-step">
+      <div class="step-circle">01</div>
+      <div class="step-content"><h4>Define the Marketing Question</h4><p>Before touching data, I identify what decision the analysis needs to support — budget reallocation, channel expansion, or measurement gap identification.</p></div>
+    </div>
+    <div class="approach-step">
+      <div class="step-circle">02</div>
+      <div class="step-content"><h4>Source & Validate Data</h4><p>Pull from APIs, public datasets, or earnings reports. Clean in Python or Excel. Document every assumption and flag estimated vs. verified figures.</p></div>
+    </div>
+    <div class="approach-step">
+      <div class="step-circle">03</div>
+      <div class="step-content"><h4>Analyze Against Benchmarks</h4><p>Performance only means something in context. I compare channel metrics against industry benchmarks — CTR, ROAS, CAC — to identify what's over- or under-performing.</p></div>
+    </div>
+    <div class="approach-step">
+      <div class="step-circle">04</div>
+      <div class="step-content"><h4>Deliver Actionable Recommendations</h4><p>Every output ties back to a decision. I present findings as recommendations with expected outcomes — not just observations.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact fade-in" id="contact">
+  <div>
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">Let's work on<br>something <em>real.</em></h2>
+    <p class="section-desc">Open to marketing analytics roles, freelance projects, and collaboration. Based in Austin, TX — available immediately.</p>
+  </div>
+  <div class="contact-right">
+    <a href="mailto:jovannagarza1@gmail.com" class="contact-link"><span>jovannagarza1@gmail.com</span><span class="contact-link-arrow">→</span></a>
+    <a href="https://www.linkedin.com/in/jovannagarza/" target="_blank" class="contact-link"><span>LinkedIn — Jovanna Garza</span><span class="contact-link-arrow">→</span></a>
+    <a href="https://github.com/jovannagarza" target="_blank" class="contact-link"><span>GitHub — Portfolio Files</span><span class="contact-link-arrow">→</span></a>
+    <a href="https://public.tableau.com/app/profile/jovanna.garza" target="_blank" class="contact-link"><span>Tableau Public — Dashboards</span><span class="contact-link-arrow">→</span></a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Jovanna Garza — Marketing Analytics · Austin, TX</p>
+  <p>Built with curiosity, data, and a lot of <span style="font-size:1rem;">☕</span></p>
+</footer>
+
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursorFollower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    fx += (mx - fx) * 0.12; fy += (my - fy) * 0.12;
+    follower.style.left = fx + 'px'; follower.style.top = fy + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2)'; cursor.style.background = 'var(--orange)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; cursor.style.background = 'var(--coral)'; });
+  });
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 40); });
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => {
+    el.classList.add('animate');
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
