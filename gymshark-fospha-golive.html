@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gymshark x Fospha — Go-Live Call</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --fospha-navy: #1a1f5e;
+    --fospha-blue: #4361ee;
+    --gymshark-black: #0a0a0a;
+    --soft-bg: #f7f8ff;
+    --text-dark: #111827;
+    --text-mid: #374151;
+    --text-light: #6b7280;
+    --border: #e5e7eb;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #1a1f5e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  /* NAV */
+  .nav { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 960px; }
+  .nav-dots { display: flex; gap: 8px; }
+  .nav-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; border: none; transition: all 0.2s; }
+  .nav-dot.active { background: white; transform: scale(1.3); }
+  .nav-label { color: rgba(255,255,255,0.55); font-size: 12px; letter-spacing: 0.3px; }
+  .nav-arrows { display: flex; gap: 8px; }
+  .nav-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); color: white; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .nav-btn:hover { background: rgba(255,255,255,0.28); }
+
+  /* SLIDES */
+  .slides-container { width: 100%; max-width: 960px; }
+  .slide { display: none; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.45); min-height: 520px; flex-direction: column; }
+  .slide.active { display: flex; }
+
+  /* SHARED HEADER */
+  .slide-header { padding: 26px 40px 22px; }
+  .slide-number { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+  .slide-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.2; }
+  .slide-body { flex: 1; padding: 24px 40px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* ── SLIDE 1: WELCOME ── */
+  .slide-1 { background: #0a0a0a; color: white; position: relative; overflow: hidden; }
+  .geo { position: absolute; border-radius: 50%; opacity: 0.04; background: white; z-index: 1; }
+  .geo-1 { width: 500px; height: 500px; top: -200px; right: -100px; }
+  .geo-2 { width: 300px; height: 300px; bottom: -100px; left: -80px; }
+  .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 28px 40px 0; position: relative; z-index: 2; }
+  .brand-combo { display: flex; align-items: center; gap: 14px; }
+  .brand-gs { font-size: 15px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: white; }
+  .brand-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.3); }
+  .brand-fospha { display: flex; align-items: center; gap: 6px; }
+  .fospha-icon { width: 18px; height: 18px; background: #4361ee; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; color: white; }
+  .brand-fospha span { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.85); }
+  .slide-tag { background: #4361ee; color: white; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; }
+  .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; position: relative; z-index: 2; }
+  .welcome-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #4361ee; margin-bottom: 18px; }
+  .welcome-title { font-size: 52px; font-weight: 900; line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 14px; }
+  .welcome-title .highlight { color: #4361ee; }
+  .welcome-sub { font-size: 16px; color: rgba(255,255,255,0.55); max-width: 480px; line-height: 1.65; }
+  .bottom-bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px 28px; border-top: 1px solid rgba(255,255,255,0.07); position: relative; z-index: 2; }
+  .presenter-name { font-size: 14px; font-weight: 700; color: white; display: block; }
+  .presenter-role { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; display: block; }
+  .slide-date { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+  /* ── SLIDE 2: WHAT IS FOSPHA ── */
+  .slide-2 { background: var(--soft-bg); }
+  .slide-2 .slide-header { background: var(--fospha-navy); }
+  .slide-2 .slide-number { color: #7b93f5; }
+  .slide-2 .slide-title { color: white; }
+  .blue { color: #7b93f5; }
+  .fospha-def { background: white; border-radius: 14px; padding: 20px 24px; border-left: 4px solid #4361ee; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .fospha-def p { font-size: 14.5px; line-height: 1.75; color: var(--text-mid); }
+  .fospha-def p strong { color: var(--fospha-navy); }
+  .three-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .info-card { background: white; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .info-card .icon { font-size: 20px; margin-bottom: 8px; }
+  .info-card h4 { font-size: 13px; font-weight: 700; color: var(--fospha-navy); margin-bottom: 5px; }
+  .info-card p { font-size: 12px; color: var(--text-light); line-height: 1.65; }
+
+  /* ── SLIDE 3: WHAT YOU'LL ACHIEVE ── */
+  .slide-3 { background: #0a0a0a; color: white; }
+  .slide-3 .slide-header { background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .slide-3 .slide-number { color: #7b93f5; }
+  .slide-3 .slide-title { color: white; }
+  .ca-block { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; }
+  .ca-icon { width: 36px; height: 36px; background: #4361ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .ca-content h4 { font-size: 13.5px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .ca-content p { font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+  .pred-box { background: linear-gradient(135deg, rgba(67,97,238,0.22), rgba(67,97,238,0.05)); border: 1px solid rgba(67,97,238,0.35); border-radius: 12px; padding: 14px 20px; display: flex; gap: 12px; align-items: flex-start; }
+  .pred-icon { font-size: 20px; flex-shrink: 0; }
+  .pred-box p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.65; font-style: italic; }
+  .pred-box p strong { color: white; font-style: normal; }
+
+  /* ── SLIDE 4: PRODUCT PACKAGE ── */
+  .slide-4 { background: var(--soft-bg); }
+  .slide-4 .slide-header { background: #0a0a0a; }
+  .slide-4 .slide-number { color: #7b93f5; }
+  .slide-4 .slide-title { color: white; }
+  .slide-4 .slide-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .product-card { background: white; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); border-top: 3px solid #4361ee; display: flex; flex-direction: column; gap: 7px; }
+  .product-card.roadmap { border-top-color: #d1d5db; background: #fafafa; }
+  .product-header { display: flex; align-items: center; justify-content: space-between; }
+  .product-name { font-size: 14px; font-weight: 800; color: var(--fospha-navy); }
+  .product-card.roadmap .product-name { color: #9ca3af; }
+  .product-badge { font-size: 10px; font-weight: 600; background: #e8ecff; color: #4361ee; padding: 3px 9px; border-radius: 20px; }
+  .product-badge.future { background: #f3f4f6; color: #9ca3af; }
+  .product-tagline { font-size: 11.5px; color: #4361ee; font-weight: 600; }
+  .product-tagline.muted { color: #b0b7c3; }
+  .product-scenario { font-size: 11.5px; color: var(--text-light); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 7px; }
+  .sc-label { font-weight: 700; color: var(--text-mid); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 3px; }
+  .product-card.roadmap .sc-label { color: #b0b7c3; }
+  .product-card.roadmap .product-scenario { color: #b0b7c3; border-top-color: #f0f0f0; }
+  .roadmap-list { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
+  .roadmap-list li { font-size: 11.5px; color: #b0b7c3; display: flex; align-items: center; gap: 6px; }
+  .roadmap-list li::before { content: "·"; font-size: 16px; color: #d1d5db; line-height: 1; }
+
+  /* ── SLIDE 5: WHAT'S NEXT ── */
+  .slide-5 { background: #f0f4ff; color: var(--text-dark); }
+  .slide-5 .slide-header { background: var(--fospha-navy); }
+  .slide-5 .slide-number { color: #7b93f5; }
+  .slide-5 .slide-title { color: white; }
+  .next-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; flex: 1; }
+  .next-card { background: white; border-radius: 14px; padding: 24px 22px; box-shadow: 0 4px 20px rgba(67,97,238,0.1); border-top: 4px solid #4361ee; display: flex; flex-direction: column; gap: 10px; }
+  .step { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #4361ee; }
+  .next-card h4 { font-size: 15px; font-weight: 800; color: var(--fospha-navy); line-height: 1.3; }
+  .next-card p { font-size: 13px; color: var(--text-light); line-height: 1.7; }
+  .closing-line { text-align: center; padding: 10px 0 4px; }
+  .closing-line p { font-size: 16px; font-weight: 600; color: var(--text-mid); }
+  .closing-line p strong { color: var(--fospha-navy); }
+
+  /* FOOTER */
+  .slide-counter { color: rgba(255,255,255,0.35); font-size: 12px; text-align: center; }
+  .keyboard-hint { color: rgba(255,255,255,0.25); font-size: 11px; text-align: center; margin-top: -4px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-dots">
+    <button class="nav-dot active" onclick="goTo(0)"></button>
+    <button class="nav-dot" onclick="goTo(1)"></button>
+    <button class="nav-dot" onclick="goTo(2)"></button>
+    <button class="nav-dot" onclick="goTo(3)"></button>
+    <button class="nav-dot" onclick="goTo(4)"></button>
+  </div>
+  <span class="nav-label" id="slide-label">Welcome</span>
+  <div class="nav-arrows">
+    <button class="nav-btn" onclick="prevSlide()">&#8592;</button>
+    <button class="nav-btn" onclick="nextSlide()">&#8594;</button>
+  </div>
+</div>
+
+<div class="slides-container">
+
+  <!-- SLIDE 1 -->
+  <div class="slide slide-1 active">
+    <div class="geo geo-1"></div>
+    <div class="geo geo-2"></div>
+    <div class="top-bar">
+      <div class="brand-combo">
+        <span class="brand-gs">Gymshark</span>
+        <div class="brand-divider"></div>
+        <div class="brand-fospha">
+          <div class="fospha-icon">F</div>
+          <span>Fospha</span>
+        </div>
+      </div>
+      <div class="slide-tag">Go-Live Call</div>
+    </div>
+    <div class="hero">
+      <p class="welcome-eyebrow">Welcome to the Platform</p>
+      <h1 class="welcome-title">You&rsquo;re <span class="highlight">live.</span><br>Let&rsquo;s get started.</h1>
+      <p class="welcome-sub">Today we&rsquo;ll walk you through what Fospha does, what it means for Gymshark, and what you can expect from here on out.</p>
+    </div>
+    <div class="bottom-bar">
+      <div>
+        <span class="presenter-name">Jovanna Garza</span>
+        <span class="presenter-role">Customer Success Coordinator, Fospha</span>
+      </div>
+      <span class="slide-date">April 13, 2026</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide slide-2">
+    <div class="slide-header">
+      <p class="slide-number">01 &mdash; What is Fospha?</p>
+      <h2 class="slide-title">Your <span class="blue">Measurement</span> Operating System</h2>
+    </div>
+    <div class="slide-body">
+      <div class="fospha-def">
+        <p>Fospha is the <strong>Measurement Operating System for retail commerce</strong>. It solves a problem every growing brand faces: knowing which ads are <strong>actually</strong> driving growth &mdash; not just the ones that got the last click. Using a Daily Marketing Mix Model, Fospha gives you a single, independent view of performance across every channel, every day.</p>
+      </div>
+      <div class="three-cols">
+        <div class="info-card">
+          <div class="icon">&#128202;</div>
+          <h4>Not last-click attribution</h4>
+          <p>We model the full customer journey &mdash; from the first TikTok impression to the final checkout &mdash; so every channel gets fair credit for its role.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">&#9889;</div>
+          <h4>Daily, not monthly</h4>
+          <p>Unlike traditional measurement that lags weeks behind, Fospha refreshes every single day so your team can act on fresh data, fast.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">&#128274;</div>
+          <h4>Privacy-first by design</h4>
+          <p>No third-party cookies, no user-level tracking. Built to meet GDPR, CCPA, and iOS14+ standards &mdash; measurement that works in a privacy-first world.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide slide-3">
+    <div class="slide-header">
+      <p class="slide-number">02 &mdash; What You&rsquo;ll Achieve With Us</p>
+      <h2 class="slide-title">Here&rsquo;s What This Looks Like for Gymshark</h2>
+    </div>
+    <div class="slide-body">
+      <div class="ca-block">
+        <div class="ca-icon">&#128241;</div>
+        <div class="ca-content">
+          <h4>One clear picture across every platform</h4>
+          <p>Meta, TikTok, Google &mdash; each platform reports its own numbers. Fospha gives you a single, independent view of CPA and ROAS across all of them, so your team spends less time debating data and more time acting on it.</p>
+        </div>
+      </div>
+      <div class="ca-block">
+        <div class="ca-icon">&#127757;</div>
+        <div class="ca-content">
+          <h4>Multi-market performance, unified</h4>
+          <p>Operating across the UK, US, and beyond means fragmented data. With Pro, Fospha unifies up to three markets into one view &mdash; so your global team speaks the same measurement language.</p>
+        </div>
+      </div>
+      <div class="ca-block">
+        <div class="ca-icon">&#128722;</div>
+        <div class="ca-content">
+          <h4>No more blind spots &mdash; DTC and marketplace together</h4>
+          <p>We show you not just what drives traffic to Gymshark.com, but how your paid social spend influences sales on Amazon and TikTok Shop too &mdash; one complete revenue picture.</p>
+        </div>
+      </div>
+      <div class="pred-box">
+        <div class="pred-icon">&#128640;</div>
+        <p>Brands using Fospha to guide spend decisions typically see <strong>faster budget reallocation, reduced wasted spend, and stronger returns from upper-funnel channels</strong> like TikTok and YouTube &mdash; channels that look expensive until you see their full impact.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide slide-4">
+    <div class="slide-header">
+      <p class="slide-number">03 &mdash; Your Product Package</p>
+      <h2 class="slide-title">What&rsquo;s included in your <span class="blue">Pro Plan</span></h2>
+    </div>
+    <div class="slide-body">
+      <div class="product-card">
+        <div class="product-header">
+          <span class="product-name">Core &mdash; Daily MMM</span>
+          <span class="product-badge">Included</span>
+        </div>
+        <p class="product-tagline">Ad-level measurement, refreshed every day</p>
+        <div class="product-scenario">
+          <span class="sc-label">Your scenario</span>
+          TikTok claims it drove &pound;500k in revenue. Google Analytics says &pound;200k. Core gives you a single, independently modelled number daily &mdash; so you have data you can trust in exec meetings.
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-header">
+          <span class="product-name">Beam &mdash; Forecasting</span>
+          <span class="product-badge">Included</span>
+        </div>
+        <p class="product-tagline">Know your next best pound of spend</p>
+        <div class="product-scenario">
+          <span class="sc-label">Your scenario</span>
+          Budget planning hits and you need to justify adding &pound;200k to Meta. Beam tells you the exact incremental return and the point spend starts to plateau &mdash; every decision, defensible.
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-header">
+          <span class="product-name">Halo &mdash; Marketplace</span>
+          <span class="product-badge">Included</span>
+        </div>
+        <p class="product-tagline">See how DTC ads drive Amazon &amp; TikTok Shop</p>
+        <div class="product-scenario">
+          <span class="sc-label">Your scenario</span>
+          A Meta push runs and Gymshark.com sales go up &mdash; but so does Amazon. Halo connects those dots, giving you unified ROAS across DTC and marketplace so you budget for total revenue, not just .com.
+        </div>
+      </div>
+      <div class="product-card roadmap">
+        <div class="product-header">
+          <span class="product-name">Room to Grow</span>
+          <span class="product-badge future">As You Scale</span>
+        </div>
+        <p class="product-tagline muted">More tools unlock as Gymshark grows</p>
+        <div class="product-scenario">
+          <span class="sc-label">On the roadmap with us</span>
+          <ul class="roadmap-list">
+            <li><strong style="color:#b0b7c3;">Glow</strong> &mdash; connect brand &amp; YouTube spend to long-term gains in AOV and baseline sales</li>
+            <li><strong style="color:#b0b7c3;">Spark AI</strong> &mdash; automated daily insights that surface performance shifts before your team even opens a dashboard</li>
+            <li><strong style="color:#b0b7c3;">Prism</strong> &mdash; automated budget optimisation, fed directly from Fospha into your bid management tools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide slide-5">
+    <div class="slide-header">
+      <p class="slide-number">Looking Ahead</p>
+      <h2 class="slide-title">What Happens From Here</h2>
+    </div>
+    <div class="slide-body">
+      <div class="next-row">
+        <div class="next-card">
+          <span class="step">Right Now</span>
+          <h4>24 Months of Data, Ready Today</h4>
+          <p>From this moment, you have 24 months of historical data already modelled in. No waiting period &mdash; insights are available immediately and your team can start making decisions today.</p>
+        </div>
+        <div class="next-card">
+          <span class="step">Ongoing</span>
+          <h4>Your Dedicated Success Team</h4>
+          <p>You have a dedicated Customer Success Coordinator and Account Manager. We&rsquo;re here for questions, strategy sessions, and making sure the platform is genuinely working for Gymshark.</p>
+        </div>
+        <div class="next-card">
+          <span class="step">Together</span>
+          <h4>Quarterly Business Reviews</h4>
+          <p>We&rsquo;ll meet regularly to review performance, share benchmarks against other retail brands, and plan ahead for key moments like BFCM and major campaign pushes.</p>
+        </div>
+      </div>
+      <div class="closing-line">
+        <p>Really glad to have you with us &mdash; <strong>over to you, any questions?</strong></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="slide-counter" id="counter">1 / 5</div>
+<div class="keyboard-hint">Use &larr; &rarr; arrow keys or the buttons above to navigate</div>
+
+<script>
+  var current = 0;
+  var slides = document.querySelectorAll('.slide');
+  var dots = document.querySelectorAll('.nav-dot');
+  var label = document.getElementById('slide-label');
+  var counter = document.getElementById('counter');
+  var names = ['Welcome', 'What is Fospha?', "What You'll Achieve", 'Your Product Package', "What's Next"];
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = ((n % slides.length) + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    label.textContent = names[current];
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+  }
+  function nextSlide() { goTo(current + 1); }
+  function prevSlide() { goTo(current - 1); }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+  });
+</script>
+</body>
+</html>
