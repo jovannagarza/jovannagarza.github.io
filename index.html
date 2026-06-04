@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jovanna Garza — Marketing Analytics & Data Strategy</title>
+  <meta name="description" content="Jovanna Garza — Economics graduate from UT Austin specializing in marketing analytics, data strategy, and quantitative research." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #f7f3ee;
+      --cream-dark: #ede8e0;
+      --sand:       #d9cfc3;
+      --tan:        #b8a99a;
+      --brown:      #7a6455;
+      --espresso:   #3d2b1f;
+      --ink:        #1a1310;
+      --sage:       #8a9e8b;
+      --rust:       #b85c38;
+      --rust-light: #f0ebe6;
+      --white:      #ffffff;
+
+      --serif:  'DM Serif Display', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
+
+      --max-w:  1100px;
+      --gap:    clamp(1.5rem, 4vw, 3rem);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: #d9cfc3; color: var(--espresso); }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─────────────────────────────────────────
+       TYPOGRAPHY
+    ───────────────────────────────────────── */
+    h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; line-height: 1.15; }
+
+    .section-label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--tan);
+      margin-bottom: 1rem;
+    }
+
+    /* ─────────────────────────────────────────
+       LAYOUT HELPERS
+    ───────────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 3rem); }
+    .section { padding: clamp(4rem, 8vw, 7rem) 0; }
+    .divider { width: 48px; height: 2px; background: var(--rust); margin: 1.5rem 0; }
+
+    /* ─────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(247, 243, 238, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--cream-dark);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 24px rgba(61,43,31,0.08); }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--espresso);
+      letter-spacing: 0.01em;
+    }
+    .nav-logo span { color: var(--rust); }
+
+    .nav-links {
+      display: flex; gap: 2.25rem; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--brown);
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px; background: var(--rust);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--rust); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-cta {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.2rem;
+      border: 1.5px solid var(--rust);
+      color: var(--rust);
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { background: var(--rust); color: var(--white); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px;
+      background: none; border: none;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--espresso); transition: 0.3s;
+    }
+
+    /* ─────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding-top: 64px;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute; top: -10%; right: -5%;
+      width: min(600px, 60vw); height: min(600px, 60vw);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,92,56,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute; bottom: 10%; left: -8%;
+      width: min(400px, 45vw); height: min(400px, 45vw);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(138,158,139,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--rust); margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block; width: 32px; height: 1.5px;
+      background: var(--rust);
+    }
+
+    .hero-name {
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      color: var(--espresso);
+      margin-bottom: 0.3rem;
+      line-height: 1.05;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+      color: var(--tan);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-bio {
+      font-size: 1.02rem;
+      color: var(--brown);
+      max-width: 500px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      background: var(--espresso); color: var(--cream);
+      font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--rust); transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      border: 1.5px solid var(--sand);
+      color: var(--brown);
+      font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--rust); color: var(--rust); transform: translateY(-1px); }
+
+    /* Hero stats grid */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+      background: var(--sand);
+      border: 1.5px solid var(--sand);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .stat-card {
+      background: var(--white);
+      padding: 1.75rem 1.5rem;
+      position: relative;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: transparent;
+      transition: background 0.3s;
+    }
+    .stat-card:hover::before { background: var(--rust); }
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: clamp(1.9rem, 3vw, 2.6rem);
+      color: var(--espresso);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-num span { color: var(--rust); font-size: 0.75em; }
+    .stat-label {
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--tan); letter-spacing: 0.03em;
+      line-height: 1.4;
+    }
+
+    /* ─────────────────────────────────────────
+       ABOUT
+    ───────────────────────────────────────── */
+    #about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+    }
+
+    .about-sidebar h2 {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: var(--espresso);
+      margin-bottom: 0.5rem;
+    }
+
+    .about-body p {
+      font-size: 1rem; color: var(--brown); margin-bottom: 1.2rem;
+    }
+
+    .credential-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 1rem;
+      margin-top: 2rem;
+    }
+    .credential-list li {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 1rem 1.25rem;
+      background: var(--cream);
+      border-radius: 3px;
+      border-left: 2px solid var(--sand);
+      transition: border-color 0.2s;
+    }
+    .credential-list li:hover { border-left-color: var(--rust); }
+
+    .credential-icon {
+      font-size: 1.1rem; flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .credential-text strong {
+      display: block; font-size: 0.88rem; font-weight: 600;
+      color: var(--espresso); margin-bottom: 0.15rem;
+    }
+    .credential-text span {
+      font-size: 0.8rem; color: var(--tan);
+    }
+
+    /* ─────────────────────────────────────────
+       SKILLS
+    ───────────────────────────────────────── */
+    #skills { background: var(--cream); }
+
+    .skills-header { text-align: center; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .skills-header h2 { font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--espresso); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5px;
+      background: var(--sand);
+      border: 1.5px solid var(--sand);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-group {
+      background: var(--white);
+      padding: 2rem 1.75rem;
+    }
+
+    .skill-group-icon {
+      font-size: 1.4rem; margin-bottom: 1rem;
+    }
+
+    .skill-group h3 {
+      font-family: var(--sans);
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--rust); margin-bottom: 1rem;
+    }
+
+    .skill-tags {
+      display: flex; flex-wrap: wrap; gap: 0.45rem;
+    }
+    .skill-tag {
+      font-size: 0.75rem; font-weight: 500;
+      padding: 0.3rem 0.65rem;
+      background: var(--cream);
+      color: var(--brown);
+      border-radius: 2px;
+      border: 1px solid var(--cream-dark);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .skill-tag:hover { background: var(--rust-light); border-color: var(--rust); color: var(--rust); }
+
+    /* ─────────────────────────────────────────
+       EXPERIENCE
+    ───────────────────────────────────────── */
+    #experience { background: var(--white); }
+
+    .exp-header { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .exp-header h2 { font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--espresso); }
+
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute; top: 0; bottom: 0; left: 11px;
+      width: 1px; background: var(--cream-dark);
+    }
+
+    .timeline-item {
+      display: flex; gap: 2rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-dot {
+      flex-shrink: 0;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--sand);
+      margin-top: 0.3rem;
+      position: relative; z-index: 1;
+      transition: border-color 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .timeline-dot::after {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--sand);
+      transition: background 0.3s;
+    }
+    .timeline-item:hover .timeline-dot { border-color: var(--rust); }
+    .timeline-item:hover .timeline-dot::after { background: var(--rust); }
+
+    .timeline-content { flex: 1; }
+
+    .exp-meta {
+      display: flex; align-items: baseline; gap: 0.75rem;
+      flex-wrap: wrap; margin-bottom: 0.3rem;
+    }
+    .exp-company {
+      font-family: var(--serif);
+      font-size: 1.3rem; color: var(--espresso);
+    }
+    .exp-badge {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      background: var(--rust-light);
+      color: var(--rust);
+      border-radius: 2px;
+    }
+
+    .exp-role {
+      font-size: 0.88rem; font-weight: 500; color: var(--brown);
+      margin-bottom: 0.2rem;
+    }
+    .exp-dates {
+      font-size: 0.78rem; color: var(--tan); margin-bottom: 1rem;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .exp-bullets li {
+      font-size: 0.9rem; color: var(--brown);
+      display: flex; gap: 0.75rem; align-items: flex-start;
+    }
+    .exp-bullets li::before {
+      content: '→';
+      color: var(--rust); flex-shrink: 0;
+      font-size: 0.8rem; margin-top: 0.18rem;
+    }
+    .exp-bullets strong { color: var(--espresso); }
+
+    /* ─────────────────────────────────────────
+       PROJECTS
+    ───────────────────────────────────────── */
+    #projects { background: var(--cream); }
+
+    .projects-header { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .projects-header h2 { font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--espresso); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--white);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--cream-dark);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(61,43,31,0.1);
+      border-color: var(--sand);
+    }
+
+    .project-card.featured { grid-column: span 7; }
+    .project-card.secondary { grid-column: span 5; }
+    .project-card.third { grid-column: span 4; }
+    .project-card.fourth { grid-column: span 4; }
+    .project-card.fifth { grid-column: span 4; }
+    .project-card.sixth { grid-column: span 12; }
+
+    .project-visual {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vis-chips   { background: linear-gradient(135deg, #2d1b10 0%, #4a2c18 50%, #6b3d22 100%); }
+    .vis-gymshark{ background: linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 50%, #3d5e3d 100%); }
+    .vis-spacex  { background: linear-gradient(135deg, #0d1117 0%, #1a2033 50%, #253050 100%); }
+    .vis-policy  { background: linear-gradient(135deg, #1e2d1e 0%, #2a3d28 50%, #374e35 100%); }
+    .vis-coming  { background: linear-gradient(135deg, #2a2420 0%, #3d3028 50%, #504039 100%); }
+    .vis-austin  { background: linear-gradient(135deg, #2a1a0a 0%, #4a2e10 50%, #6b4520 100%); }
+
+    .project-visual-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 0.6rem 1.25rem;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(4px);
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #6ee7b7; flex-shrink: 0;
+    }
+    .status-dot.pending { background: var(--tan); }
+
+    .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+
+    .project-tags {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem;
+    }
+    .project-tag {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.22rem 0.55rem;
+      border-radius: 2px;
+    }
+    .tag-analytics { background: #fdf0eb; color: #b85c38; }
+    .tag-ml        { background: #edf4ed; color: #4a7a4a; }
+    .tag-economics { background: #f0edf7; color: #6a4a9a; }
+    .tag-marketing { background: #fdf5e8; color: #9a6a20; }
+    .tag-coming    { background: #f0ede8; color: #7a6455; }
+
+    .project-title {
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      color: var(--espresso); margin-bottom: 0.6rem;
+    }
+
+    .project-desc {
+      font-size: 0.87rem; color: var(--brown); line-height: 1.65;
+      flex: 1; margin-bottom: 1.25rem;
+    }
+
+    .project-findings {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.35rem;
+      margin-bottom: 1.25rem;
+    }
+    .project-findings li {
+      font-size: 0.82rem; color: var(--brown);
+      display: flex; align-items: baseline; gap: 0.5rem;
+    }
+    .project-findings li .num {
+      font-family: var(--serif); color: var(--rust);
+      font-size: 0.95rem; flex-shrink: 0;
+    }
+
+    .project-footer {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cream-dark);
+      margin-top: auto;
+    }
+
+    .project-link {
+      font-size: 0.76rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--rust);
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      transition: gap 0.2s;
+    }
+    .project-link:hover { gap: 0.55rem; }
+
+    .project-date {
+      font-size: 0.73rem; color: var(--tan); margin-left: auto;
+    }
+
+    /* Coming soon overlay */
+    .coming-overlay {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--tan);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    /* ─────────────────────────────────────────
+       EDUCATION
+    ───────────────────────────────────────── */
+    #education { background: var(--white); }
+
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .edu-card {
+      padding: 2rem 1.75rem;
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .edu-card:hover {
+      border-color: var(--sand);
+      box-shadow: 0 6px 24px rgba(61,43,31,0.07);
+    }
+    .edu-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: var(--rust);
+    }
+
+    .edu-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+
+    .edu-institution {
+      font-family: var(--serif);
+      font-size: 1.2rem; color: var(--espresso);
+      margin-bottom: 0.25rem;
+    }
+
+    .edu-degree {
+      font-size: 0.88rem; color: var(--brown); font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .edu-meta {
+      font-size: 0.78rem; color: var(--tan);
+      margin-bottom: 1rem;
+    }
+
+    .edu-highlights {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .edu-highlights li {
+      font-size: 0.82rem; color: var(--brown);
+      display: flex; gap: 0.5rem; align-items: flex-start;
+    }
+    .edu-highlights li::before {
+      content: '—'; color: var(--tan); flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       CONTACT
+    ───────────────────────────────────────── */
+    #contact {
+      background: var(--espresso);
+      color: var(--cream);
+      padding: clamp(4rem, 8vw, 7rem) 0;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: center;
+    }
+
+    .contact-left h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-left p {
+      font-size: 1rem; color: var(--sand);
+      line-height: 1.75; margin-bottom: 2rem;
+    }
+
+    .contact-links {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+
+    .contact-link-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 3px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .contact-link-item:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(184,92,56,0.4);
+    }
+    .contact-link-icon {
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-link-text strong {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      color: var(--cream); margin-bottom: 0.1rem;
+    }
+    .contact-link-text span {
+      font-size: 0.78rem; color: var(--tan);
+    }
+
+    .contact-right {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      padding: 2.5rem;
+    }
+
+    .contact-right h3 {
+      font-family: var(--serif);
+      font-size: 1.4rem; color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      color: var(--cream);
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(217,207,195,0.4);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--rust);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-group select option { background: var(--espresso); }
+
+    .form-submit {
+      width: 100%; padding: 0.9rem;
+      background: var(--rust);
+      color: var(--white);
+      border: none; border-radius: 2px;
+      font-family: var(--sans);
+      font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .form-submit:hover { background: #a04e2e; transform: translateY(-1px); }
+
+    /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      padding: 2rem 0;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-name {
+      font-family: var(--serif); font-size: 1rem;
+      color: var(--tan);
+    }
+    .footer-copy {
+      font-size: 0.75rem; color: rgba(184,169,154,0.5);
+    }
+    .footer-links {
+      display: flex; gap: 1.5rem; list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.75rem; color: var(--tan);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--rust); }
+
+    /* ─────────────────────────────────────────
+       SCROLL ANIMATIONS
+    ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─────────────────────────────────────────
+       MOBILE
+    ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-stats { order: -1; grid-template-columns: 1fr 1fr; }
+
+      .about-grid { grid-template-columns: 1fr; }
+
+      .contact-inner { grid-template-columns: 1fr; }
+
+      .project-card.featured,
+      .project-card.secondary,
+      .project-card.third,
+      .project-card.fourth,
+      .project-card.fifth,
+      .project-card.sixth { grid-column: span 12; }
+
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .stat-num { font-size: 1.7rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* Mobile nav open state */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: fixed; top: 64px; left: 0; right: 0;
+      background: var(--cream);
+      border-bottom: 1px solid var(--cream-dark);
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem);
+      gap: 1.25rem;
+      z-index: 99;
+      box-shadow: 0 8px 24px rgba(61,43,31,0.1);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 1rem; font-weight: 500; color: var(--brown);
+    }
+    .mobile-menu a:hover { color: var(--rust); }
+  </style>
+</head>
+
+<body>
+  <!-- ═══════════════════════════
+       NAV
+  ═══════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">Jovanna<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="mailto:jovannagarza1@gmail.com" class="nav-cta">Get In Touch</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#experience" onclick="closeMobile()">Experience</a>
+    <a href="#projects" onclick="closeMobile()">Projects</a>
+    <a href="#education" onclick="closeMobile()">Education</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- ═══════════════════════════
+       HERO
+  ═══════════════════════════ -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <div class="hero-eyebrow">Marketing Analytics &amp; Data Strategy</div>
+          <h1 class="hero-name">Jovanna<br>Garza</h1>
+          <p class="hero-title">Economics &amp; Quantitative Methods</p>
+          <p class="hero-bio">
+            UT Austin economics graduate turning data into decisions.
+            I build end-to-end analytics, from causal inference to interactive dashboards,
+            for clients who need clarity, not just charts.
+            Based in Austin, TX. Bilingual English&nbsp;/ Spanish.
+          </p>
+          <div class="hero-actions">
+            <a href="#projects" class="btn-primary">View Projects ↓</a>
+            <a href="https://github.com/jovannagarza" target="_blank" rel="noopener" class="btn-secondary">GitHub ↗</a>
+          </div>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-num">16<span>+</span></div>
+            <div class="stat-label">Enterprise Clients Managed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">94.4<span>%</span></div>
+            <div class="stat-label">ML Model Accuracy</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">75<span>%</span></div>
+            <div class="stat-label">Task Time Reduction</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">191<span>%</span></div>
+            <div class="stat-label">NVIDIA Revenue Growth Identified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════
+       ABOUT
+  ═══════════════════════════ -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-sidebar reveal">
+          <div class="section-label">About Me</div>
+          <h2>Analyst who asks<br><em>why</em> before&nbsp;what</h2>
+          <div class="divider"></div>
+          <ul class="credential-list" style="margin-top:1.5rem">
+            <li>
+              <span class="credential-icon">🎓</span>
+              <div class="credential-text">
+                <strong>BA Economics, UT Austin</strong>
+                <span>Minor in Business · August 2025</span>
+              </div>
+            </li>
+            <li>
+              <span class="credential-icon">📍</span>
+              <div class="credential-text">
+                <strong>Austin, TX</strong>
+                <span>Open to remote &amp; hybrid roles</span>
+              </div>
+            </li>
+            <li>
+              <span class="credential-icon">🌎</span>
+              <div class="credential-text">
+                <strong>Bilingual</strong>
+                <span>English &amp; Spanish (native/fluent)</span>
+              </div>
+            </li>
+            <li>
+              <span class="credential-icon">🏆</span>
+              <div class="credential-text">
+                <strong>Intern of the Month, twice</strong>
+                <span>Penta Group · Media Monitoring</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="about-body reveal reveal-delay-2">
+          <p>
+            I graduated from the University of Texas at Austin in August 2025 with a degree in Economics
+            and a minor in Business. My coursework in econometrics, causal inference, and policy evaluation
+            gave me a rigorous foundation for quantitative work, the kind that asks whether a correlation
+            actually means anything before acting on it.
+          </p>
+          <p>
+            At Penta Group, I worked as the primary point of contact for 16 enterprise clients including
+            SoFi, Affirm, KPMG, and Live Nation, managing up to 9 accounts concurrently under
+            sub-30-minute SLA requirements. I built a ChatGPT + HTML automation workflow that cut a
+            daily reporting task from 60 minutes to 15. My lead later told me the work "saved a client,"
+            which turned into an upsell for Twitter monitoring. I was named Intern of the Month twice.
+          </p>
+          <p>
+            My projects span competitive intelligence, predictive modeling, and policy evaluation.
+            I'm drawn to roles that bridge the technical and the strategic, where a well-framed question
+            and a clean dataset can change how a business operates.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════
+       SKILLS
+  ═══════════════════════════ -->
+  <section id="skills" class="section">
+    <div class="container">
+      <div class="skills-header reveal">
+        <div class="section-label">Toolkit</div>
+        <h2>Skills &amp; Methods</h2>
+      </div>
+      <div class="skills-grid reveal reveal-delay-1">
+        <div class="skill-group">
+          <div class="skill-group-icon">🐍</div>
+          <h3>Programming</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">R</span>
+            <span class="skill-tag">Stata</span>
+            <span class="skill-tag">Pandas</span>
+            <span class="skill-tag">Scikit-learn</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-icon">📊</div>
+          <h3>Visualization</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Matplotlib</span>
+            <span class="skill-tag">Plotly Dash</span>
+            <span class="skill-tag">Power BI</span>
+            <span class="skill-tag">Tableau</span>
+            <span class="skill-tag">Seaborn</span>
+            <span class="skill-tag">Excel</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-icon">📣</div>
+          <h3>Marketing Analytics</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">MMM</span>
+            <span class="skill-tag">A/B Testing</span>
+            <span class="skill-tag">ROAS Analysis</span>
+            <span class="skill-tag">Media Attribution</span>
+            <span class="skill-tag">Meta Ads</span>
+            <span class="skill-tag">GA4</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-icon">🔬</div>
+          <h3>Economics Methods</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Regression Analysis</span>
+            <span class="skill-tag">Diff-in-Diff</span>
+            <span class="skill-tag">Fixed Effects</span>
+            <span class="skill-tag">Causal Inference</span>
+            <span class="skill-tag">Policy Evaluation</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-icon">🛠</div>
+          <h3>Tools &amp; Platforms</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">GitHub Pages</span>
+            <span class="skill-tag">HTML/CSS/JS</span>
+            <span class="skill-tag">Salesforce</span>
+            <span class="skill-tag">Boolean Search</span>
+            <span class="skill-tag">Adobe CC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════
+       EXPERIENCE
+  ═══════════════════════════ -->
+  <section id="experience" class="section">
+    <div class="container">
+      <div class="exp-header reveal">
+        <div class="section-label">Work History</div>
+        <h2>Experience</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="timeline">
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="exp-meta">
+              <span class="exp-company">Penta Group</span>
+              <span class="exp-badge">⭐ Intern of the Month x2</span>
+            </div>
+            <div class="exp-role">Media Monitoring Analyst Intern</div>
+            <div class="exp-dates">May 2024 – December 2025 · Washington DC (Remote)</div>
+            <ul class="exp-bullets">
+              <li>Served as <strong>primary point of contact</strong> for 16 enterprise clients (SoFi, Affirm, KPMG, Live Nation), managing 9 concurrent accounts under a sub-30-minute response SLA.</li>
+              <li>Built a <strong>ChatGPT + HTML bookmark workflow</strong> that reduced a daily reporting task from 60 minutes to 15, a <strong>75% time reduction</strong> adopted across the team.</li>
+              <li>Automation flagged a breaking news story ahead of client deadline; lead confirmed the work <strong>"saved a client,"</strong> resulting in an upsell for Twitter monitoring.</li>
+              <li>Named <strong>Intern of the Month twice</strong> for performance, responsiveness, and process improvement impact.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-1">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="exp-meta">
+              <span class="exp-company">Benavides Elementary</span>
+            </div>
+            <div class="exp-role">Data Analysis Volunteer · La Joya ISD</div>
+            <div class="exp-dates">January 2024 – April 2024 · Austin, TX</div>
+            <ul class="exp-bullets">
+              <li>Built a <strong>SQL + Power BI reporting pipeline</strong> to track student benchmark progress over a semester.</li>
+              <li>Analysis contributed to a <strong>31% improvement</strong> in benchmark scores by surfacing at-risk students for targeted intervention.</li>
+              <li>Delivered findings to teachers and administrators in a structured visual report.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-2">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="exp-meta">
+              <span class="exp-company">Texas Women in Economics</span>
+            </div>
+            <div class="exp-role">Member · UT Austin</div>
+            <div class="exp-dates">2023 – 2025 · Austin, TX</div>
+            <ul class="exp-bullets">
+              <li>Attended speaker events and panels featuring economists and finance professionals, took detailed notes on presentations, and engaged with guest speakers during Q&amp;A sessions.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════
+       PROJECTS
+  ═══════════════════════════ -->
+  <section id="projects" class="section">
+    <div class="container">
+      <div class="projects-header reveal">
+        <div class="section-label">Portfolio</div>
+        <h2>Selected Projects</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- FEATURED: AI Chips -->
+        <div class="project-card featured reveal">
+          <div class="project-visual vis-chips">
+            <span>📈</span>
+            <div class="project-visual-label">
+              <span class="status-dot"></span>
+              Live on GitHub
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag tag-analytics">Python</span>
+              <span class="project-tag tag-analytics">Competitive Intel</span>
+              <span class="project-tag tag-analytics">Financial Analysis</span>
+            </div>
+            <h3 class="project-title">AI Semiconductor Competitive Landscape Analysis</h3>
+            <p class="project-desc">
+              Full-stack competitive intelligence report on AMD, NVIDIA, Intel, Qualcomm, and TSMC.
+              Sourced from 10-K filings and earnings data. Five publication-quality Python/Matplotlib
+              charts, a written analyst memo, and an interactive HTML report. Identifies NVIDIA's
+              structural advantages and the broader industry's TSMC dependency risk.
+            </p>
+            <ul class="project-findings">
+              <li><span class="num">+191%</span> NVIDIA revenue growth (FY2022–2024)</li>
+              <li><span class="num">75%</span> NVIDIA gross margin, highest in cohort</li>
+              <li><span class="num">$4.41M</span> revenue/employee vs Intel's $0.49M</li>
+              <li><span class="num">5</span> original charts from 10-K source data</li>
+            </ul>
+            <div class="project-footer">
+              <a href="https://github.com/jovannagarza/ai-semiconductor-analysis" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+              <span class="project-date">May 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gymshark -->
+        <div class="project-card secondary reveal reveal-delay-1">
+          <div class="project-visual vis-gymshark">
+            <span>🏋️</span>
+            <div class="project-visual-label">
+              <span class="status-dot"></span>
+              Live Report
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag tag-marketing">Marketing Analytics</span>
+              <span class="project-tag tag-marketing">ROAS</span>
+            </div>
+            <h3 class="project-title">Gymshark Client Insights Report</h3>
+            <p class="project-desc">
+              Simulated Fospha client engagement for Gymshark. Used Companies House UK filings
+              (FY2022–2024) to surface a US revenue stagnation problem invisible in top-line
+              global growth. Delivered paid media attribution recommendations with ROAS uplift estimates.
+            </p>
+            <ul class="project-findings">
+              <li><span class="num">0.2%</span> US revenue growth vs 9.2% global</li>
+              <li><span class="num">+39%</span> TikTok ROAS improvement identified</li>
+              <li><span class="num">+13%</span> cross-channel ROAS uplift modeled</li>
+            </ul>
+            <div class="project-footer">
+              <a href="https://jovannagarza.github.io/gymshark.html" target="_blank" rel="noopener" class="project-link">View Report →</a>
+              <span class="project-date">April 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SpaceX -->
+        <div class="project-card third reveal">
+          <div class="project-visual vis-spacex">
+            <span>🚀</span>
+            <div class="project-visual-label">
+              <span class="status-dot"></span>
+              IBM Capstone
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag tag-ml">Machine Learning</span>
+              <span class="project-tag tag-ml">Python</span>
+            </div>
+            <h3 class="project-title">SpaceX Falcon 9 Landing Prediction</h3>
+            <p class="project-desc">
+              End-to-end ML pipeline for IBM Data Science Professional Certificate capstone.
+              Web-scraped launch data, built SQL queries, created interactive Plotly Dash dashboard
+              and Folium launch-site maps, trained classification models.
+            </p>
+            <ul class="project-findings">
+              <li><span class="num">94.4%</span> Decision Tree accuracy</li>
+              <li><span class="num">4</span> models compared: LR, SVM, Tree, KNN</li>
+            </ul>
+            <div class="project-footer">
+              <a href="https://github.com/jovannagarza/Spacex-Applied-Data-Science-Capstone" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+              <span class="project-date">April 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Policy -->
+        <div class="project-card fourth reveal reveal-delay-1">
+          <div class="project-visual vis-policy">
+            <span>🌿</span>
+            <div class="project-visual-label">
+              <span class="status-dot"></span>
+              UT Austin Coursework
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag tag-economics">Economics</span>
+              <span class="project-tag tag-economics">Causal Inference</span>
+            </div>
+            <h3 class="project-title">Environmental Policy Evaluation: NOx Emissions</h3>
+            <p class="project-desc">
+              Evaluated the causal impact of Home Energy Reports on household NOx emissions using
+              difference-in-differences and panel fixed-effects models in R. Constructed treatment
+              and control groups, ran t-tests, and reported confidence intervals on policy effect sizes.
+            </p>
+            <ul class="project-findings">
+              <li><span class="num">DiD</span> + fixed-effects identification strategy</li>
+              <li><span class="num">R</span> · Stata · causal inference methods</li>
+            </ul>
+            <div class="project-footer">
+              <span class="project-link" style="color: var(--brown); cursor: default;">UT Austin · Spring 2025</span>
+              <span class="project-date">Spring 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GA4 -->
+        <div class="project-card fifth reveal reveal-delay-2">
+          <div class="project-visual vis-coming">
+            <span>💄</span>
+            <div class="project-visual-label">
+              <span class="status-dot"></span>
+              Live Report
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag tag-marketing">GA4</span>
+              <span class="project-tag tag-marketing">ROAS</span>
+            </div>
+            <h3 class="project-title">GA4 Marketing Analytics: Rare Beauty vs Rhode</h3>
+            <p class="project-desc">
+              Comparative digital performance analysis of two Gen Z beauty brands using GA4
+              framework, paid social attribution modeling, and conversion funnel analysis.
+              Six original Python charts and a full written report.
+            </p>
+            <ul class="project-findings">
+              <li><span class="num">5.6x</span> Rhode TikTok ROAS vs Rare's 4.2x</li>
+              <li><span class="num">+240%</span> Rhode brand search growth</li>
+            </ul>
+            <div class="project-footer">
+              <a href="https://jovannagarza.github.io/ga4-beauty-analytics/report.html" target="_blank" rel="noopener" class="project-link">View Report →</a>
+              <span class="project-date">June 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Austin Eats -->
+        <div class="project-card sixth reveal">
+          <div class="project-visual vis-austin" style="height:160px">
+            <span>🍽️</span>
+            <div class="project-visual-label">
+              <span class="status-dot pending"></span>
+              Tableau Live · App in Development
+            </div>
+          </div>
+          <div class="project-body" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start">
+            <div>
+              <div class="project-tags">
+                <span class="project-tag tag-analytics">Python</span>
+                <span class="project-tag tag-analytics">Tableau</span>
+                <span class="project-tag tag-coming">Product Dev</span>
+              </div>
+              <h3 class="project-title">Austin Eats: Restaurant Discovery App</h3>
+              <p class="project-desc">
+                Personal project, product development phase. Built an end-to-end data pipeline pulling
+                230 Austin restaurants via Google Places API, cleaned in Python with custom neighborhood
+                mapping across 20 Austin areas. Designed a hidden gem scoring algorithm to surface
+                underrated spots over popular ones. Tableau Public dashboard is live. App development in progress.
+              </p>
+            </div>
+            <div>
+              <ul class="project-findings" style="margin-top:0.25rem">
+                <li><span class="num">230</span> restaurants via Google Places API</li>
+                <li><span class="num">20</span> Austin neighborhoods mapped by zip code</li>
+                <li><span class="num">0</span> "Other Austin" after neighborhood fix</li>
+                <li><span class="num">58</span> restaurants with unknown price data, labeled honestly</li>
+              </ul>
+              <div class="project-footer" style="margin-top:1rem">
+                <a href="https://public.tableau.com/app/profile/jovanna.garza/viz/AustinEats/AustinEatsMap" target="_blank" rel="noopener" class="project-link">Live Dashboard →</a>
+                <span class="project-date" style="margin-left:auto">2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /projects-grid -->
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════
+       EDUCATION
+  ═══════════════════════════ -->
+  <section id="education" class="section">
+    <div class="container">
+      <div style="margin-bottom: clamp(2.5rem, 5vw, 4rem)" class="reveal">
+        <div class="section-label">Academic Background</div>
+        <h2 style="font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--espresso)">Education &amp; Certifications</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="edu-grid">
+
+        <div class="edu-card reveal">
+          <div class="edu-icon">🤘</div>
+          <div class="edu-institution">University of Texas at Austin</div>
+          <div class="edu-degree">BA Economics, Minor in Business</div>
+          <div class="edu-meta">Graduated August 2025 · Austin, TX</div>
+          <ul class="edu-highlights">
+            <li>Econometrics &amp; causal inference (R, Stata)</li>
+            <li>Difference-in-differences, fixed-effects models</li>
+            <li>Policy evaluation &amp; program analysis</li>
+            <li>Texas Women in Economics, member</li>
+          </ul>
+        </div>
+
+        <div class="edu-card reveal reveal-delay-1">
+          <div class="edu-icon">🏅</div>
+          <div class="edu-institution">IBM Data Science Professional</div>
+          <div class="edu-degree">Professional Certificate · Coursera</div>
+          <div class="edu-meta">Completed April 2025</div>
+          <ul class="edu-highlights">
+            <li>10-course program in data science &amp; ML</li>
+            <li>SpaceX Falcon 9 capstone, 94.4% accuracy</li>
+            <li>Python, SQL, Scikit-learn, Plotly Dash, Folium</li>
+            <li>BeautifulSoup web scraping &amp; data wrangling</li>
+          </ul>
+        </div>
+
+        <div class="edu-card reveal reveal-delay-2">
+          <div class="edu-icon">📱</div>
+          <div class="edu-institution">Meta Marketing Analytics</div>
+          <div class="edu-degree">Professional Certificate · Coursera</div>
+          <div class="edu-meta">Completed April 2025</div>
+          <ul class="edu-highlights">
+            <li>Marketing Mix Modeling &amp; attribution</li>
+            <li>A/B testing design &amp; statistical analysis</li>
+            <li>Media measurement &amp; campaign analytics</li>
+            <li>GA4, Meta Ads, conversion tracking</li>
+          </ul>
+        </div>
+
+        <div class="edu-card reveal reveal-delay-3">
+          <div class="edu-icon">📊</div>
+          <div class="edu-institution">Google Data Analytics</div>
+          <div class="edu-degree">Professional Certificate · Coursera</div>
+          <div class="edu-meta" style="display:flex;align-items:center;gap:0.5rem">
+            In Progress · 2026
+            <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.18rem 0.5rem;background:#fdf5e8;color:#9a6a20;border-radius:2px">Active</span>
+          </div>
+          <ul class="edu-highlights">
+            <li>Data cleaning, analysis &amp; visualization</li>
+            <li>SQL, Python, R, Tableau, Google Sheets</li>
+            <li>Data storytelling &amp; presentation</li>
+            <li>9-course series, Google Career Certificates</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════
+       CONTACT
+  ═══════════════════════════ -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+
+        <div class="contact-left reveal">
+          <div class="section-label" style="color: var(--tan)">Let's Work Together</div>
+          <h2>Open to marketing analytics &amp; data strategy roles</h2>
+          <p>
+            I'm actively looking for full-time opportunities where I can apply quantitative economics
+            and marketing analytics to real business problems. Based in Austin, TX, open to remote.
+          </p>
+          <div class="contact-links">
+            <a href="mailto:jovannagarza1@gmail.com" class="contact-link-item">
+              <span class="contact-link-icon">✉️</span>
+              <div class="contact-link-text">
+                <strong>Email</strong>
+                <span>jovannagarza1@gmail.com</span>
+              </div>
+            </a>
+            <a href="https://linkedin.com/in/jovannagarza" target="_blank" rel="noopener" class="contact-link-item">
+              <span class="contact-link-icon">💼</span>
+              <div class="contact-link-text">
+                <strong>LinkedIn</strong>
+                <span>linkedin.com/in/jovannagarza</span>
+              </div>
+            </a>
+            <a href="https://github.com/jovannagarza" target="_blank" rel="noopener" class="contact-link-item">
+              <span class="contact-link-icon">🐙</span>
+              <div class="contact-link-text">
+                <strong>GitHub</strong>
+                <span>github.com/jovannagarza</span>
+              </div>
+            </a>
+            <div class="contact-link-item" style="cursor:default">
+              <span class="contact-link-icon">📍</span>
+              <div class="contact-link-text">
+                <strong>Location</strong>
+                <span>Austin, TX · Open to remote</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-right reveal reveal-delay-2">
+          <h3>Send a message</h3>
+          <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label for="cf-name">Your Name</label>
+              <input type="text" id="cf-name" placeholder="Jane Smith" required />
+            </div>
+            <div class="form-group">
+              <label for="cf-email">Email Address</label>
+              <input type="email" id="cf-email" placeholder="jane@company.com" required />
+            </div>
+            <div class="form-group">
+              <label for="cf-subject">Subject</label>
+              <select id="cf-subject">
+                <option value="">Select a topic…</option>
+                <option>Job Opportunity</option>
+                <option>Project Collaboration</option>
+                <option>General Inquiry</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" placeholder="Tell me about the role or project…" required></textarea>
+            </div>
+            <button type="submit" class="form-submit" id="submitBtn">Send Message ↗</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════
+       FOOTER
+  ═══════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-name">Jovanna Garza</span>
+        <span class="footer-copy">© 2026 · Built with care, deployed on GitHub Pages</span>
+        <ul class="footer-links">
+          <li><a href="https://github.com/jovannagarza" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/jovannagarza" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:jovannagarza1@gmail.com">Email</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════
+       JS
+  ═══════════════════════════ -->
+  <script>
+    /* Nav scroll shadow */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    /* Mobile menu */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+    }
+    document.addEventListener('click', (e) => {
+      if (!navbar.contains(e.target)) closeMobile();
+    });
+
+    /* Scroll reveal */
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+
+    /* Contact form */
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const name = document.getElementById('cf-name').value;
+      const email = document.getElementById('cf-email').value;
+      const subject = document.getElementById('cf-subject').value || 'General Inquiry';
+      const message = document.getElementById('cf-message').value;
+
+      // Open mailto as fallback (works on GitHub Pages without a backend)
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+      const subj = encodeURIComponent(`Portfolio Contact: ${subject}`);
+      window.location.href = `mailto:jovannagarza1@gmail.com?subject=${subj}&body=${body}`;
+
+      btn.textContent = 'Opening email client…';
+      setTimeout(() => { btn.textContent = 'Send Message ↗'; }, 2500);
+    }
+
+    /* Smooth anchor offset for fixed nav */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        const offset = 72;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
